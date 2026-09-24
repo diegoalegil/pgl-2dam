@@ -44,4 +44,6 @@ Me costó encontrar la extensión correcta para cada caso, porque hay algunas en
 
 Me parece que las tecnologías que usaremos a lo largo de este módulo son todas super interesantes. Además me gusta la temática de hacer nuestra propia Pokédex, me parece una idea muy guay, y a mí me gusta bastante Pokémon. No sabría quedarme con alguna, primero porque no las hemos probado y segundo porque noté que de alguna manera se necesitan unas de otras para funcionar. Aun así, tengo ganas de probar React Native para hacer nuestra propia app de la Pokédex, que me parece super interesante.
 
-![Pokémon de la primera generación](imagenes/pokemon.jpeg)
+<p align="center">
+  <img src="imagenes/pokemon.jpg" alt="Pokémon de la primera generación" width="400">
+</p>
