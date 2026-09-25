@@ -10,14 +10,16 @@ Repositorio de actividades y proyectos del módulo de Programación multimedia y
 
 ## Contenidos
 
+## 1.er trimestre
+
 ### Tema 0. Introducción
 
-- [Práctica 00. Iniciación a JavaScript](tema-0-introduccion/practica-00-iniciacion-javascript/README.md)
-- [Práctica 01. Extensiones necesarias para VS Code](tema-0-introduccion/practica-01-extensiones-vscode/README.md)
+- [Práctica 00. Iniciación a JavaScript](1er-trimestre/tema-0-introduccion/practica-00-iniciacion-javascript/README.md)
+- [Práctica 01. Extensiones necesarias para VS Code](1er-trimestre/tema-0-introduccion/practica-01-extensiones-vscode/README.md)
 
 ### UT1. Fundamentos y tecnologías para el desarrollo multiplataforma
 
-Próximamente.
+- [Práctica 01. Energía de un Pokémon](1er-trimestre/ut1-fundamentos/practica-01-energia-pokemon/ejercicio-01.js)
 
 ### UT2. Desarrollo de aplicaciones móviles con React Native
 
@@ -32,5 +34,13 @@ Próximamente.
 Próximamente.
 
 ### UT5. Desarrollo de un videojuego con Unity
+
+Próximamente.
+
+## 2.º trimestre
+
+Próximamente.
+
+## 3.er trimestre
 
 Próximamente.
