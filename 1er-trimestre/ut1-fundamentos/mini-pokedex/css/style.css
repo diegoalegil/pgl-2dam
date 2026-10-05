@@ -98,7 +98,6 @@ h1 {
 .pokemon__imagen {
   width: 180px;
   height: 180px;
-  image-rendering: pixelated;
 }
 
 .pokemon__nombre {
