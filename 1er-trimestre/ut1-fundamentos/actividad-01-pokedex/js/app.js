@@ -1,8 +1,12 @@
+const URL_API = "https://pokeapi.co/api/v2/pokemon";
+const TOTAL_POKEMON = 151;
+
 const formulario = document.querySelector("#formulario-busqueda");
 const inputBusqueda = document.querySelector("#busqueda");
 const mensaje = document.querySelector("#mensaje");
 const resultado = document.querySelector("#resultado");
 const botonBuscar = formulario.querySelector("button");
+const botonCargar = document.querySelector("#boton-cargar");
 
 const obtenerPokemon = async (busqueda) => {
   const url = `https://pokeapi.co/api/v2/pokemon/${busqueda}`;
@@ -84,4 +88,10 @@ formulario.addEventListener("submit", async (evento) => {
   } finally {
     botonBuscar.disabled = false;
   }
+});
+
+botonCargar.addEventListener("click", async () => {
+  const respuesta = await fetch(`${URL_API}/25`);
+  const datos = await respuesta.json();
+  console.log("Datos:", datos);
 });
