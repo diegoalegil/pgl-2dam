@@ -20,7 +20,7 @@ Repositorio de actividades y proyectos del módulo de Programación multimedia y
 ### UT1. Fundamentos y tecnologías para el desarrollo multiplataforma
 
 - [Práctica 01. Energía de un Pokémon](1er-trimestre/ut1-fundamentos/practica-01-energia-pokemon/ejercicio-01.js)
-- [Práctica guiada. Mini-Pokédex](1er-trimestre/ut1-fundamentos/mini-pokedex/)
+- [Práctica guiada. Mini-Pokédex](1er-trimestre/ut1-fundamentos/mini-pokedex/README.md)
 
 ### UT2. Desarrollo de aplicaciones móviles con React Native
 
