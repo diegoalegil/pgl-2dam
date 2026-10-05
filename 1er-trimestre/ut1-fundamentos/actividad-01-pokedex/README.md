@@ -63,3 +63,13 @@ En la consola también me salía un `Uncaught (in promise) Error: Could not esta
 ![Búsqueda de un Pokémon que no existe](assets/readme/01-error-no-encontrado.png)
 
 **Commit del punto de partida:** [`72ae29d`](https://github.com/diegoalegil/pgl-2dam/commit/72ae29d0fe63f1a50e799fa49c57e26de100f36d)
+
+## 2. Carga de los 151 Pokémon
+
+### Cambios respecto al código inicial
+
+- En el HTML metí el título y la explicación dentro de un `<header>`, cambié el título a "Pokédex de Diego" y puse una explicación nueva de cómo se usa.
+- Añadí el botón "Cargar Pokémon" con `type="button"`, para que nunca envíe el formulario, y un desplegable `<select>` para filtrar por tipo, de momento solo con la opción "Todos".
+- El mensaje ahora empieza con "Pulsa «Cargar Pokémon» para empezar.".
+- En el CSS puse la cabecera roja con el título en blanco, el contenedor más ancho (1100 px) para que luego quepan las tarjetas, estilos para el botón nuevo y el desplegable, y una Poké Ball como cursor en los botones. La imagen es la de PokéAPI y está en `assets/images/pokeball.png`.
+- La búsqueda de un solo Pokémon de la guía sigue funcionando igual.

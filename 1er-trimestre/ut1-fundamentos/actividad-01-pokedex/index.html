@@ -3,16 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mini-Pokédex</title>
+    <title>Pokédex de Diego</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <main class="contenedor">
-      <h1>Mini-Pokédex</h1>
+      <header class="cabecera">
+        <h1>Pokédex de Diego</h1>
 
-      <p class="introduccion">
-        Introduce el nombre o el número de un Pokémon.
-      </p>
+        <p class="introduccion">
+          Primero se pulsa "Cargar Pokémon" y te saldrán los 151, luego se
+          puede buscar un Pokémon, bien sea por su nombre o su número de
+          Pokédex, y también se puede filtrar por tipo.
+        </p>
+      </header>
+
+      <button id="boton-cargar" class="boton-cargar" type="button">
+        Cargar Pokémon
+      </button>
 
       <form id="formulario-busqueda" class="buscador">
         <label for="busqueda">Nombre o número</label>
@@ -28,9 +36,17 @@
 
           <button type="submit">Buscar</button>
         </div>
+
+        <label for="filtro-tipo">Tipo</label>
+
+        <select id="filtro-tipo" name="tipo">
+          <option value="todos">Todos</option>
+        </select>
       </form>
 
-      <p id="mensaje" class="mensaje" aria-live="polite"></p>
+      <p id="mensaje" class="mensaje" aria-live="polite">
+        Pulsa «Cargar Pokémon» para empezar.
+      </p>
 
       <section id="resultado" class="resultado"></section>
     </main>
