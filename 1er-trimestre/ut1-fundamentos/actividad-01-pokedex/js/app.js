@@ -97,5 +97,8 @@ const obtenerListaPokemon = async () => {
 };
 
 botonCargar.addEventListener("click", async () => {
-  await obtenerListaPokemon();
+  const listaPokemon = await obtenerListaPokemon();
+  console.log("Total:", listaPokemon.length);
+  console.log("Primero:", listaPokemon[0].nombre);
+  console.log("Último:", listaPokemon[150].nombre);
 });
