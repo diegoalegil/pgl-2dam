@@ -92,7 +92,8 @@ const obtenerListaPokemon = async () => {
     peticiones.push(obtenerPokemon(id));
   }
 
-  console.log("Peticiones:", peticiones.length);
+  const listaPokemon = await Promise.all(peticiones);
+  return listaPokemon;
 };
 
 botonCargar.addEventListener("click", async () => {
