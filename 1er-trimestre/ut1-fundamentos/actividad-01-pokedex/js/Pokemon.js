@@ -7,5 +7,6 @@ export class Pokemon {
     this.spriteEspalda = datos.sprites.back_default;
     this.spriteFrente = datos.sprites.front_default;
     this.imagenGrande = datos.sprites.other["official-artwork"].front_default;
+    this.experienciaBase = datos.base_experience;
   }
 }
