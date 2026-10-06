@@ -86,9 +86,13 @@ formulario.addEventListener("submit", async (evento) => {
 });
 
 const obtenerListaPokemon = async () => {
+  const peticiones = [];
+
   for (let id = 1; id <= TOTAL_POKEMON; id++) {
-    console.log(id);
+    peticiones.push(obtenerPokemon(id));
   }
+
+  console.log("Peticiones:", peticiones.length);
 };
 
 botonCargar.addEventListener("click", async () => {
