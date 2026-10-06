@@ -1,3 +1,5 @@
+import { Pokemon } from "./Pokemon.js";
+
 const URL_API = "https://pokeapi.co/api/v2/pokemon";
 const TOTAL_POKEMON = 151;
 
