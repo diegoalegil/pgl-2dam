@@ -85,6 +85,12 @@ formulario.addEventListener("submit", async (evento) => {
   }
 });
 
+const obtenerListaPokemon = async () => {
+  for (let id = 1; id <= TOTAL_POKEMON; id++) {
+    console.log(id);
+  }
+};
+
 botonCargar.addEventListener("click", async () => {
   const respuesta = await fetch(`${URL_API}/25`);
   const datos = await respuesta.json();
