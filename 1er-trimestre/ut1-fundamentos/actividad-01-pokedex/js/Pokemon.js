@@ -6,5 +6,6 @@ export class Pokemon {
     this.peso = datos.weight / 10;
     this.spriteEspalda = datos.sprites.back_default;
     this.spriteFrente = datos.sprites.front_default;
+    this.imagenGrande = datos.sprites.other["official-artwork"].front_default;
   }
 }
