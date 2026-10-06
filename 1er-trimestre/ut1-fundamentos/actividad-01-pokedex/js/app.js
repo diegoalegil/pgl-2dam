@@ -38,15 +38,15 @@ const mostrarPokemon = (pokemon) => {
 
       <img
         class="pokemon__imagen"
-        src="${pokemon.imagen}"
+        src="${pokemon.imagenGrande}"
         alt="Imagen de ${pokemon.nombre}"
       >
 
       <h2 class="pokemon__nombre">${pokemon.nombre}</h2>
 
       <div class="pokemon__datos">
-        <p><strong>Altura</strong><br>${pokemon.altura / 10} m</p>
-        <p><strong>Peso</strong><br>${pokemon.peso / 10} kg</p>
+        <p><strong>Altura</strong><br>${pokemon.altura} m</p>
+        <p><strong>Peso</strong><br>${pokemon.peso} kg</p>
       </div>
 
       <div class="pokemon__tipos">
