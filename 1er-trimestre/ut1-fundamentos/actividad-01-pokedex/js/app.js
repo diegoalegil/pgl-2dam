@@ -96,4 +96,6 @@ botonCargar.addEventListener("click", async () => {
   const respuesta = await fetch(`${URL_API}/25`);
   const datos = await respuesta.json();
   console.log("Datos:", datos);
+  const pokemon = new Pokemon(datos);
+  console.log("Pokémon:", pokemon);
 });
