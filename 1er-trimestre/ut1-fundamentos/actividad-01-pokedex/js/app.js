@@ -2,6 +2,14 @@ import { Pokemon } from "./Pokemon.js";
 
 const URL_API = "https://pokeapi.co/api/v2/pokemon";
 const TOTAL_POKEMON = 151;
+const NOMBRES_ESTADISTICAS = {
+  hp: "Puntos de salud",
+  attack: "Ataque",
+  defense: "Defensa",
+  "special-attack": "Ataque especial",
+  "special-defense": "Defensa especial",
+  speed: "Velocidad",
+};
 
 const formulario = document.querySelector("#formulario-busqueda");
 const inputBusqueda = document.querySelector("#busqueda");
@@ -9,6 +17,9 @@ const filtroTipo = document.querySelector("#filtro-tipo");
 const mensaje = document.querySelector("#mensaje");
 const resultado = document.querySelector("#resultado");
 const botonCargar = document.querySelector("#boton-cargar");
+const panelDetalles = document.querySelector("#panel-detalles");
+const contenidoDetalles = document.querySelector("#contenido-detalles");
+const botonCerrar = document.querySelector("#boton-cerrar");
 
 let listaPokemon = [];
 
@@ -34,11 +45,13 @@ const formatearTexto = (texto) => {
   return textoConEspacios.charAt(0).toUpperCase() + textoConEspacios.slice(1);
 };
 
-const crearTarjeta = (pokemon) => {
-  const tiposHTML = pokemon.tipos
+const crearTiposHTML = (tipos) => {
+  return tipos
     .map((tipo) => `<span class="tipo tipo--${tipo}">${tipo}</span>`)
     .join("");
+};
 
+const crearTarjeta = (pokemon) => {
   return `
     <article class="tarjeta">
       <p class="tarjeta__numero">N.º ${formatearId(pokemon.id)}</p>
@@ -59,19 +72,83 @@ const crearTarjeta = (pokemon) => {
       <h2 class="tarjeta__nombre">${formatearTexto(pokemon.nombre)}</h2>
 
       <div class="tarjeta__tipos">
-        ${tiposHTML}
+        ${crearTiposHTML(pokemon.tipos)}
       </div>
 
       <div class="tarjeta__datos">
         <p><strong>Altura</strong><br>${pokemon.altura} m</p>
         <p><strong>Peso</strong><br>${pokemon.peso} kg</p>
       </div>
+
+      <button class="tarjeta__boton" type="button" data-id="${pokemon.id}">
+        Ver detalles
+      </button>
     </article>
   `;
 };
 
+const mostrarDetalles = (pokemon) => {
+  const habilidadesHTML = pokemon.habilidades
+    .map((habilidad) => `<li>${formatearTexto(habilidad)}</li>`)
+    .join("");
+
+  const estadisticasHTML = pokemon.estadisticas
+    .map((estadistica) => {
+      return `
+        <li class="estadistica">
+          <span>${NOMBRES_ESTADISTICAS[estadistica.nombre]}</span>
+          <strong>${estadistica.valor}</strong>
+        </li>
+      `;
+    })
+    .join("");
+
+  contenidoDetalles.innerHTML = `
+    <p class="tarjeta__numero">N.º ${formatearId(pokemon.id)}</p>
+    <h2 class="panel__nombre">${formatearTexto(pokemon.nombre)}</h2>
+
+    <img
+      class="panel__imagen"
+      src="${pokemon.imagenGrande}"
+      alt="Ilustración oficial de ${formatearTexto(pokemon.nombre)}"
+    >
+
+    <div class="tarjeta__tipos">
+      ${crearTiposHTML(pokemon.tipos)}
+    </div>
+
+    <div class="panel__datos">
+      <p><strong>Altura</strong><br>${pokemon.altura} m</p>
+      <p><strong>Peso</strong><br>${pokemon.peso} kg</p>
+      <p><strong>Experiencia base</strong><br>${pokemon.experienciaBase}</p>
+    </div>
+
+    <h3>Habilidades</h3>
+    <ul class="panel__habilidades">
+      ${habilidadesHTML}
+    </ul>
+
+    <h3>Estadísticas base</h3>
+    <ul class="panel__estadisticas">
+      ${estadisticasHTML}
+    </ul>
+  `;
+
+  panelDetalles.showModal();
+};
+
 const mostrarTarjetas = (lista) => {
   resultado.innerHTML = lista.map((pokemon) => crearTarjeta(pokemon)).join("");
+
+  const botonesDetalles = resultado.querySelectorAll(".tarjeta__boton");
+
+  botonesDetalles.forEach((boton) => {
+    boton.addEventListener("click", () => {
+      const id = Number(boton.dataset.id);
+      const pokemon = listaPokemon.find((elemento) => elemento.id === id);
+      mostrarDetalles(pokemon);
+    });
+  });
 };
 
 const rellenarFiltroTipo = () => {
@@ -159,3 +236,13 @@ formulario.addEventListener("submit", (evento) => {
 
 inputBusqueda.addEventListener("input", aplicarFiltros);
 filtroTipo.addEventListener("change", aplicarFiltros);
+
+botonCerrar.addEventListener("click", () => {
+  panelDetalles.close();
+});
+
+panelDetalles.addEventListener("click", (evento) => {
+  if (evento.target === panelDetalles) {
+    panelDetalles.close();
+  }
+});
