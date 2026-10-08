@@ -72,4 +72,69 @@ En la consola también me salía un `Uncaught (in promise) Error: Could not esta
 - Añadí el botón "Cargar Pokémon" con `type="button"`, para que nunca envíe el formulario, y un desplegable `<select>` para filtrar por tipo, de momento solo con la opción "Todos".
 - El mensaje ahora empieza con `Pulsa "Cargar Pokémon" para empezar.`
 - En el CSS puse la cabecera roja con el título en blanco, el contenedor más ancho (1100 px) para que luego quepan las tarjetas, estilos para el botón nuevo y el desplegable, y una Poké Ball como cursor en los botones. La imagen es la de PokéAPI y está en `assets/images/pokeball.png`.
+- Creé la clase `Pokemon` en `js/Pokemon.js` y la importé en `app.js`. Para poder usar `import` tuve que poner `type="module"` en el `<script>` del HTML.
+- `obtenerPokemon` ya no devuelve un objeto escrito a mano, devuelve `new Pokemon(datos)`.
 - La búsqueda de un solo Pokémon de la guía sigue funcionando igual.
+
+### La clase Pokemon
+
+La API devuelve un objeto enorme (Pikachu trae más de 100 movimientos), así que la clase se queda solo con lo que necesito y ya transformado:
+
+| Atributo | De dónde sale en la API | Qué le hago |
+|---|---|---|
+| `id` | `id` | Nada |
+| `nombre` | `name` | Nada |
+| `altura` | `height` | Entre 10, porque viene en decímetros y la quiero en metros |
+| `peso` | `weight` | Entre 10, porque viene en hectogramos y lo quiero en kilos |
+| `spriteEspalda` | `sprites.back_default` | Nada |
+| `spriteFrente` | `sprites.front_default` | Nada |
+| `imagenGrande` | `sprites.other["official-artwork"].front_default` | Nada (va con corchetes por el guion) |
+| `experienciaBase` | `base_experience` | Nada |
+| `tipos` | `types` | Con `map` me quedo solo con el nombre de cada tipo |
+
+Los movimientos y todo lo demás no los guardo porque no los uso.
+
+### Cómo se cargan los 151
+
+Para no pedirlos uno detrás de otro, los pido todos a la vez. En el bucle llamo a `obtenerPokemon(id)` sin `await`, así me da una promesa por cada uno, y luego con `Promise.all` espero a que lleguen todas juntas. `Promise.all` los devuelve en el mismo orden en que los pedí, del 1 al 151.
+
+```javascript
+const obtenerListaPokemon = async () => {
+  const peticiones = [];
+
+  for (let id = 1; id <= TOTAL_POKEMON; id++) {
+    peticiones.push(obtenerPokemon(id));
+  }
+
+  const listaPokemon = await Promise.all(peticiones);
+  return listaPokemon;
+};
+```
+
+Lo comprobé con unos `console.log` temporales: salían 151, el primero era Bulbasaur y el último Mew. Tarda menos de un segundo.
+
+### Mensajes y errores al cargar
+
+- Al pulsar el botón sale "Cargando Pokémon..." y el botón se desactiva para que no se pueda pulsar dos veces.
+- Cuando terminan sale "Se han cargado 151 Pokémon." (el número sale de `listaPokemon.length`) y el botón se oculta porque ya no hace falta.
+- Si falla la conexión sale "No se han podido cargar los Pokémon. Revisa tu conexión a internet e inténtalo de nuevo." y el botón cambia a "Reintentar". El error técnico solo sale en la consola con `console.error`.
+- El botón se vuelve a activar en el `finally`, haya ido bien o mal.
+
+Para probar el error usé Chrome: en la pestaña Red marqué "Inhabilitar caché", puse "Sin conexión" y pulsé el botón sin recargar. Luego volví a "Sin limitación", pulsé "Reintentar" y cargaron los 151.
+
+### Problemas que tuve
+
+- Al guardar el nombre puse `datos.nombre` y salía `undefined`, porque en la API se llama `name`. Con el peso me pasó lo mismo (`datos.peso`) y salía `NaN`. Lo que aprendí: a la izquierda va mi nombre en español y a la derecha el de la API en inglés.
+- Me costó sacar la imagen grande porque está muy metida dentro del JSON. Primero copié el camino de la URL de la imagen y no tiene nada que ver con el JSON. Lo saqué abriendo las cajas en la consola y usando corchetes para `official-artwork`.
+- Cuando `obtenerPokemon` empezó a devolver la clase se rompió la búsqueda: no salía la imagen y Pikachu medía 0,04 m. Era porque la tarjeta usaba `imagen` (ahora es `imagenGrande`) y volvía a dividir entre 10 lo que la clase ya había dividido.
+- Una vez cambié el código y el navegador seguía enseñando el viejo. Era la caché y se arregla recargando con `Cmd + Option + R`.
+
+### Capturas
+
+![Mientras cargan los Pokémon](assets/readme/02-cargando.png)
+
+![Los 151 Pokémon cargados](assets/readme/02-cargados.png)
+
+![Error al cargar sin conexión y botón Reintentar](assets/readme/02-error-conexion.png)
+
+**Commit de la fase:** [`0352db9`](https://github.com/diegoalegil/pgl-2dam/commit/0352db912ad527eaa2121f346ad780f4f33a3ad4)
