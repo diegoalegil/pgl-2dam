@@ -24,7 +24,7 @@ const botonCerrar = document.querySelector("#boton-cerrar");
 let listaPokemon = [];
 
 const obtenerPokemon = async (busqueda) => {
-  const url = `https://pokeapi.co/api/v2/pokemon/${busqueda}`;
+  const url = `${URL_API}/${busqueda}`;
   const respuesta = await fetch(url);
 
   if (!respuesta.ok) {
@@ -135,6 +135,7 @@ const mostrarDetalles = (pokemon) => {
   `;
 
   panelDetalles.showModal();
+  panelDetalles.scrollTop = 0;
 };
 
 const mostrarTarjetas = (lista) => {
@@ -173,11 +174,11 @@ const rellenarFiltroTipo = () => {
 
 const aplicarFiltros = () => {
   if (listaPokemon.length === 0) {
-    mensaje.textContent = 'Primero pulsa "Cargar Pokémon".';
+    mensaje.textContent = "Todavía no hay Pokémon cargados.";
     return;
   }
 
-  const texto = inputBusqueda.value.trim().toLowerCase();
+  const texto = inputBusqueda.value.trim().toLowerCase().replace(" ", "-");
   const tipo = filtroTipo.value;
 
   const filtrados = listaPokemon.filter((pokemon) => {
@@ -195,7 +196,7 @@ const aplicarFiltros = () => {
   if (filtrados.length === 0) {
     mensaje.textContent = "No hay ningún Pokémon que coincida con la búsqueda.";
   } else {
-    mensaje.textContent = `Se muestran ${filtrados.length} de ${listaPokemon.length} Pokémon.`;
+    mensaje.textContent = `Mostrando ${filtrados.length} de ${listaPokemon.length} Pokémon.`;
   }
 };
 
@@ -206,8 +207,8 @@ const obtenerListaPokemon = async () => {
     peticiones.push(obtenerPokemon(id));
   }
 
-  const listaPokemon = await Promise.all(peticiones);
-  return listaPokemon;
+  const lista = await Promise.all(peticiones);
+  return lista;
 };
 
 botonCargar.addEventListener("click", async () => {
@@ -217,12 +218,14 @@ botonCargar.addEventListener("click", async () => {
   try {
     listaPokemon = await obtenerListaPokemon();
     rellenarFiltroTipo();
+    inputBusqueda.value = "";
     mostrarTarjetas(listaPokemon);
     mensaje.textContent = `Se han cargado ${listaPokemon.length} Pokémon.`;
     botonCargar.hidden = true;
   } catch (error) {
     console.error(error);
-    mensaje.textContent = "No se han podido cargar los Pokémon. Revisa tu conexión a internet e inténtalo de nuevo.";
+    mensaje.textContent =
+      "No se han podido cargar los Pokémon. Revisa tu conexión a internet e inténtalo de nuevo.";
     botonCargar.textContent = "Reintentar";
   } finally {
     botonCargar.disabled = false;

@@ -228,15 +228,15 @@ h1 {
 }
 
 .tipo--normal {
-  background: #8a8a62;
+  background: #6b6b4c;
 }
 
 .tipo--fire {
-  background: #e0661b;
+  background: #c2410c;
 }
 
 .tipo--water {
-  background: #3f74e0;
+  background: #2f62c9;
 }
 
 .tipo--electric {
@@ -245,7 +245,7 @@ h1 {
 }
 
 .tipo--grass {
-  background: #4f9e2e;
+  background: #3a7d24;
 }
 
 .tipo--ice {
@@ -267,19 +267,19 @@ h1 {
 }
 
 .tipo--flying {
-  background: #8a6fe0;
+  background: #6f55c9;
 }
 
 .tipo--psychic {
-  background: #e0336f;
+  background: #c9235c;
 }
 
 .tipo--bug {
-  background: #7f9116;
+  background: #647012;
 }
 
 .tipo--rock {
-  background: #a08c2e;
+  background: #7a6b22;
 }
 
 .tipo--ghost {
