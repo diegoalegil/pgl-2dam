@@ -196,3 +196,61 @@ La sección `resultado` ahora es una cuadrícula con `grid-template-columns: rep
 
 **Commit de la fase:** [`44c62a3`](https://github.com/diegoalegil/pgl-2dam/commit/44c62a3449522d0751a923f040134730e533daf3)
 
+## 4. Barra de búsqueda y filtros
+
+### Cambios respecto a la guía
+
+La búsqueda de la guía preguntaba a la API por un solo Pokémon. Ahora que ya tengo los 151 cargados no hace falta preguntar nada, así que la búsqueda filtra la lista que ya tengo. Por eso he quitado `mostrarPokemon` y el `listener` viejo del formulario, y también los estilos de la tarjeta grande (`.pokemon`).
+
+### Cómo funciona la búsqueda
+
+Todo está en la función `aplicarFiltros`:
+
+1. Coge el texto del buscador con `trim()` y `toLowerCase()`, como en la guía, para que dé igual poner mayúsculas o espacios.
+2. Con `filter` se queda con los Pokémon que coinciden. Un Pokémon coincide si:
+   - el buscador está vacío,
+   - o su nombre contiene el texto (`includes`), así funcionan los trozos como "char",
+   - o su número es el que he escrito (`pokemon.id === Number(texto)`), así funciona "25" y también "025".
+3. Pinta las tarjetas que han quedado con `mostrarTarjetas`.
+
+La búsqueda se hace mientras escribes (evento `input`) y también al pulsar "Buscar" o Enter (evento `submit`, con `preventDefault()` para que no se recargue la página). Si borras todo vuelven a salir los 151.
+
+Si todavía no se han cargado los Pokémon sale `Primero pulsa "Cargar Pokémon".`
+
+### Filtro por tipo
+
+El desplegable se rellena solo al cargar, con la función `rellenarFiltroTipo`. Recorre los 151 y va guardando cada tipo en un array si todavía no estaba (`includes` + `push`). Luego los ordena con `sort()` y crea un `<option>` por cada uno. Así no he escrito la lista de tipos a mano: salen los 17 que hay en los 151.
+
+### Cómo se combinan los dos filtros
+
+En el mismo `filter` compruebo las dos cosas y el Pokémon solo se queda si cumple las dos:
+
+```javascript
+const coincideTipo = tipo === "todos" || pokemon.tipos.includes(tipo);
+
+return coincideTexto && coincideTipo;
+```
+
+Por ejemplo, "char" con el tipo Flying solo deja a Charizard.
+
+### Mensajes
+
+- Si hay resultados sale cuántos se muestran, por ejemplo "Se muestran 3 de 151 Pokémon.".
+- Si no hay ninguno sale "No hay ningún Pokémon que coincida con la búsqueda." y no queda ninguna tarjeta.
+
+### Capturas
+
+![Buscar pikachu](assets/readme/04-busqueda-pikachu.png)
+
+![Buscar 25](assets/readme/04-busqueda-25.png)
+
+![Buscar el trozo char](assets/readme/04-busqueda-char.png)
+
+![Buscar un Pokémon que no existe](assets/readme/04-sin-resultados.png)
+
+![Filtrar por tipo fire](assets/readme/04-tipo-fire.png)
+
+![Texto y tipo a la vez: char y Flying](assets/readme/04-combinado.png)
+
+**Commit de la fase:** [`ea07636`](https://github.com/diegoalegil/pgl-2dam/commit/ea076368840e0685ab43729b324585636b43c503)
+
