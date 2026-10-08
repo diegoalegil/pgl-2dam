@@ -98,12 +98,17 @@ const obtenerListaPokemon = async () => {
 
 botonCargar.addEventListener("click", async () => {
   mensaje.textContent = "Cargando Pokémon...";
+  botonCargar.disabled = true;
 
   try {
     const listaPokemon = await obtenerListaPokemon();
     mensaje.textContent = `Se han cargado ${listaPokemon.length} Pokémon.`;
+    botonCargar.hidden = true;
   } catch (error) {
     console.error(error);
     mensaje.textContent = "No se han podido cargar los Pokémon. Revisa tu conexión a internet e inténtalo de nuevo.";
+    botonCargar.textContent = "Reintentar";
+  } finally {
+    botonCargar.disabled = false;
   }
 });
