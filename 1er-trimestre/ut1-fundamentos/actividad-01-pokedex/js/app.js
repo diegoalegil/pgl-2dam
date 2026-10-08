@@ -10,6 +10,8 @@ const resultado = document.querySelector("#resultado");
 const botonBuscar = formulario.querySelector("button");
 const botonCargar = document.querySelector("#boton-cargar");
 
+let listaPokemon = [];
+
 const obtenerPokemon = async (busqueda) => {
   const url = `https://pokeapi.co/api/v2/pokemon/${busqueda}`;
   const respuesta = await fetch(url);
@@ -25,6 +27,51 @@ const obtenerPokemon = async (busqueda) => {
 
 const formatearId = (id) => {
   return String(id).padStart(3, "0");
+};
+
+const formatearTexto = (texto) => {
+  const textoConEspacios = texto.replace("-", " ");
+  return textoConEspacios.charAt(0).toUpperCase() + textoConEspacios.slice(1);
+};
+
+const crearTarjeta = (pokemon) => {
+  const tiposHTML = pokemon.tipos
+    .map((tipo) => `<span class="tipo tipo--${tipo}">${tipo}</span>`)
+    .join("");
+
+  return `
+    <article class="tarjeta">
+      <p class="tarjeta__numero">N.º ${formatearId(pokemon.id)}</p>
+
+      <div class="tarjeta__sprites">
+        <img
+          class="tarjeta__sprite tarjeta__sprite--espalda"
+          src="${pokemon.spriteEspalda}"
+          alt="${formatearTexto(pokemon.nombre)} de espaldas"
+        >
+        <img
+          class="tarjeta__sprite tarjeta__sprite--frente"
+          src="${pokemon.spriteFrente}"
+          alt="${formatearTexto(pokemon.nombre)} de frente"
+        >
+      </div>
+
+      <h2 class="tarjeta__nombre">${formatearTexto(pokemon.nombre)}</h2>
+
+      <div class="tarjeta__tipos">
+        ${tiposHTML}
+      </div>
+
+      <div class="tarjeta__datos">
+        <p><strong>Altura</strong><br>${pokemon.altura} m</p>
+        <p><strong>Peso</strong><br>${pokemon.peso} kg</p>
+      </div>
+    </article>
+  `;
+};
+
+const mostrarTarjetas = (lista) => {
+  resultado.innerHTML = lista.map((pokemon) => crearTarjeta(pokemon)).join("");
 };
 
 const mostrarPokemon = (pokemon) => {
@@ -101,7 +148,8 @@ botonCargar.addEventListener("click", async () => {
   botonCargar.disabled = true;
 
   try {
-    const listaPokemon = await obtenerListaPokemon();
+    listaPokemon = await obtenerListaPokemon();
+    mostrarTarjetas(listaPokemon);
     mensaje.textContent = `Se han cargado ${listaPokemon.length} Pokémon.`;
     botonCargar.hidden = true;
   } catch (error) {
