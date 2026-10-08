@@ -138,3 +138,61 @@ Para probar el error usé Chrome: en la pestaña Red marqué "Inhabilitar caché
 ![Error al cargar sin conexión y botón Reintentar](assets/readme/02-error-conexion.png)
 
 **Commit de la fase:** [`0352db9`](https://github.com/diegoalegil/pgl-2dam/commit/0352db912ad527eaa2121f346ad780f4f33a3ad4)
+
+## 3. Construcción de las tarjetas
+
+### Datos que uso de PokéAPI
+
+Cada tarjeta enseña el número, el nombre, los dos sprites, los tipos, la altura en metros y el peso en kilos. Todo eso ya lo tenía en la clase `Pokemon` desde la fase anterior, así que no he tenido que pedir nada nuevo a la API.
+
+### Cómo se generan las tarjetas
+
+He hecho dos funciones en `app.js`:
+
+- `crearTarjeta(pokemon)` devuelve el HTML de una tarjeta como texto, con una plantilla literal. Es parecida a la `mostrarPokemon` de la guía.
+- `mostrarTarjetas(lista)` hace un `map` para crear todas las tarjetas, las une con `join("")` y las mete en la sección `resultado` con `innerHTML`.
+
+```javascript
+const mostrarTarjetas = (lista) => {
+  resultado.innerHTML = lista.map((pokemon) => crearTarjeta(pokemon)).join("");
+};
+```
+
+La lista de los 151 la he sacado fuera del botón (`let listaPokemon = [];` arriba del todo) porque en la siguiente fase la necesito también para buscar y filtrar.
+
+Los tipos salen con `map` igual que en la guía, y cada uno lleva una clase con su nombre (`tipo--fire`, `tipo--water`...) para darle un color distinto en el CSS. Para que los nombres se lean bien hice `formatearTexto`, que pone la primera letra en mayúscula y cambia el guion por un espacio. Así "mr-mime" sale como "Mr mime", que era lo que tenía pendiente del apartado 1.
+
+### Cambio de sprite al pasar el cursor
+
+Lo he hecho solo con CSS. Cada tarjeta lleva las dos imágenes, la de espaldas y la de frente, y la de frente está oculta. Cuando pasas el cursor por la tarjeta se cambian:
+
+```css
+.tarjeta__sprite--frente {
+  display: none;
+}
+
+.tarjeta:hover .tarjeta__sprite--espalda {
+  display: none;
+}
+
+.tarjeta:hover .tarjeta__sprite--frente {
+  display: block;
+}
+```
+
+Así nunca se ven las dos a la vez y no se hace ninguna petición nueva a la API, porque las dos imágenes ya se cargaron al pintar las tarjetas. Lo comprobé en la pestaña Red: al pasar el cursor no aparece ninguna petición.
+
+### Cuadrícula para móvil y ordenador
+
+La sección `resultado` ahora es una cuadrícula con `grid-template-columns: repeat(auto-fill, minmax(150px, 1fr))`. Así caben las columnas que entren según el ancho: 6 en el ordenador y 2 en el móvil, sin que se salga nada por los lados.
+
+### Capturas
+
+![Las tarjetas de los 151 Pokémon](assets/readme/03-tarjetas.png)
+
+![Con el cursor encima de Charmander sale de frente y los demás de espaldas](assets/readme/03-hover.png)
+
+![Las tarjetas en el móvil](assets/readme/03-movil.png)
+
+**Commit de la fase:** [`44c62a3`](https://github.com/diegoalegil/pgl-2dam/commit/44c62a3449522d0751a923f040134730e533daf3)
+
