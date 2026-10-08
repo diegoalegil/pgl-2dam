@@ -96,53 +96,6 @@ h1 {
   gap: 1rem;
 }
 
-.pokemon {
-  grid-column: 1 / -1;
-  justify-self: center;
-  width: min(100%, 360px);
-  padding: 1.5rem;
-  text-align: center;
-  background: white;
-  border-radius: 1rem;
-  box-shadow: 0 8px 25px rgb(0 0 0 / 10%);
-}
-
-.pokemon__imagen {
-  width: 180px;
-  height: 180px;
-}
-
-.pokemon__nombre {
-  margin: 0.5rem 0;
-  text-transform: capitalize;
-}
-
-.pokemon__numero {
-  color: #6b7280;
-  font-weight: bold;
-}
-
-.pokemon__datos {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin: 1.5rem 0;
-}
-
-.pokemon__datos p {
-  margin: 0;
-  padding: 0.75rem;
-  background: #f3f4f6;
-  border-radius: 0.5rem;
-}
-
-.pokemon__tipos {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
 .tipo {
   padding: 0.3rem 0.7rem;
   color: white;

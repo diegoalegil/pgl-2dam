@@ -5,9 +5,9 @@ const TOTAL_POKEMON = 151;
 
 const formulario = document.querySelector("#formulario-busqueda");
 const inputBusqueda = document.querySelector("#busqueda");
+const filtroTipo = document.querySelector("#filtro-tipo");
 const mensaje = document.querySelector("#mensaje");
 const resultado = document.querySelector("#resultado");
-const botonBuscar = formulario.querySelector("button");
 const botonCargar = document.querySelector("#boton-cargar");
 
 let listaPokemon = [];
@@ -74,63 +74,53 @@ const mostrarTarjetas = (lista) => {
   resultado.innerHTML = lista.map((pokemon) => crearTarjeta(pokemon)).join("");
 };
 
-const mostrarPokemon = (pokemon) => {
-  const tiposHTML = pokemon.tipos
-    .map((tipo) => `<span class="tipo">${tipo}</span>`)
+const rellenarFiltroTipo = () => {
+  const tipos = [];
+
+  listaPokemon.forEach((pokemon) => {
+    pokemon.tipos.forEach((tipo) => {
+      if (!tipos.includes(tipo)) {
+        tipos.push(tipo);
+      }
+    });
+  });
+
+  tipos.sort();
+
+  const opcionesHTML = tipos
+    .map((tipo) => `<option value="${tipo}">${formatearTexto(tipo)}</option>`)
     .join("");
 
-  resultado.innerHTML = `
-    <article class="pokemon">
-      <p class="pokemon__numero">N.º ${formatearId(pokemon.id)}</p>
-
-      <img
-        class="pokemon__imagen"
-        src="${pokemon.imagenGrande}"
-        alt="Imagen de ${pokemon.nombre}"
-      >
-
-      <h2 class="pokemon__nombre">${pokemon.nombre}</h2>
-
-      <div class="pokemon__datos">
-        <p><strong>Altura</strong><br>${pokemon.altura} m</p>
-        <p><strong>Peso</strong><br>${pokemon.peso} kg</p>
-      </div>
-
-      <div class="pokemon__tipos">
-        ${tiposHTML}
-      </div>
-    </article>
-  `;
+  filtroTipo.innerHTML = `<option value="todos">Todos</option>${opcionesHTML}`;
 };
 
-formulario.addEventListener("submit", async (evento) => {
-  evento.preventDefault();
-
-  const busqueda = inputBusqueda.value.trim().toLowerCase();
-
-  if (!busqueda) {
-    mensaje.textContent = "Introduce un nombre o número.";
-    resultado.innerHTML = "";
+const aplicarFiltros = () => {
+  if (listaPokemon.length === 0) {
+    mensaje.textContent = 'Primero pulsa "Cargar Pokémon".';
     return;
   }
 
-  mensaje.textContent = "Cargando...";
-  resultado.innerHTML = "";
-  botonBuscar.disabled = true;
+  const texto = inputBusqueda.value.trim().toLowerCase();
+  const tipo = filtroTipo.value;
 
-  try {
-    const pokemon = await obtenerPokemon(busqueda);
+  const filtrados = listaPokemon.filter((pokemon) => {
+    const coincideTexto =
+      texto === "" ||
+      pokemon.nombre.includes(texto) ||
+      pokemon.id === Number(texto);
+    const coincideTipo = tipo === "todos" || pokemon.tipos.includes(tipo);
 
-    mostrarPokemon(pokemon);
-    mensaje.textContent = "";
-    inputBusqueda.value = "";
-    inputBusqueda.focus();
-  } catch (error) {
-    mensaje.textContent = error.message;
-  } finally {
-    botonBuscar.disabled = false;
+    return coincideTexto && coincideTipo;
+  });
+
+  mostrarTarjetas(filtrados);
+
+  if (filtrados.length === 0) {
+    mensaje.textContent = "No hay ningún Pokémon que coincida con la búsqueda.";
+  } else {
+    mensaje.textContent = `Se muestran ${filtrados.length} de ${listaPokemon.length} Pokémon.`;
   }
-});
+};
 
 const obtenerListaPokemon = async () => {
   const peticiones = [];
@@ -149,6 +139,7 @@ botonCargar.addEventListener("click", async () => {
 
   try {
     listaPokemon = await obtenerListaPokemon();
+    rellenarFiltroTipo();
     mostrarTarjetas(listaPokemon);
     mensaje.textContent = `Se han cargado ${listaPokemon.length} Pokémon.`;
     botonCargar.hidden = true;
@@ -160,3 +151,11 @@ botonCargar.addEventListener("click", async () => {
     botonCargar.disabled = false;
   }
 });
+
+formulario.addEventListener("submit", (evento) => {
+  evento.preventDefault();
+  aplicarFiltros();
+});
+
+inputBusqueda.addEventListener("input", aplicarFiltros);
+filtroTipo.addEventListener("change", aplicarFiltros);
