@@ -400,3 +400,28 @@ Al repasarlo todo encontré algunas cosas más y las arreglé en el commit [`e9d
 - La constante `URL_API` no se usaba: `obtenerPokemon` volvía a escribir la URL entera. Ahora la usa.
 - Dentro de `obtenerListaPokemon` había una variable que se llamaba igual que la lista de fuera (`listaPokemon`) y liaba al leerlo. La cambié a `lista`.
 
+## 8. Conclusiones
+
+### Dificultades
+
+Lo que más me costó fue sacar los datos del JSON de la API. Al principio no entendía que eran cajas dentro de cajas y me liaba bastante, sobre todo con la imagen grande (`sprites.other["official-artwork"].front_default`), que intenté sacar copiando el camino de la URL de la imagen y no tenía nada que ver. También me salían muchos `undefined` y algún `NaN` por poner el nombre en español en vez del de la API (`datos.nombre` en vez de `datos.name`), hasta que entendí que a la izquierda va lo mío y a la derecha lo de la API.
+
+El `for` también me dio guerra. Una vez le puse cuatro partes en vez de tres y dejó de funcionar todo el archivo, y siempre tengo que pensar bien si va `<` o `<=` para que entre el 151.
+
+Y lo que más me costó entender fueron las promesas y el `Promise.all`. No veía por qué en el bucle no se pone `await` y luego sí. Me ayudó pensarlo como pedir pizzas: pides las 151 a la vez, te dan un tique por cada una y con `Promise.all` esperas a que lleguen todas juntas.
+
+### Lo que he aprendido
+
+- Cómo funcionan las promesas, `async` y `await`, y por qué hacen falta cuando se pide algo a internet.
+- Cómo se comunica una página con una API: `fetch`, comprobar `respuesta.ok` porque un 404 no da error solo, y `respuesta.json()` para tener el objeto.
+- Cómo funciona un programa de JavaScript en el navegador: se cogen los elementos del HTML con `querySelector`, se escuchan los eventos con `addEventListener` y se cambia lo que se ve con `textContent` e `innerHTML`.
+- A usar una clase para quedarme solo con los datos que necesito y no con todo lo que manda la API.
+- A trabajar con arrays usando `map`, `filter`, `find` y `join`, que antes casi no los había usado.
+- A probar cada cosa en la consola antes de seguir, y que cuando algo sale `undefined` lo primero es mirar el nombre.
+
+### Mejoras para el futuro
+
+- Un easter egg de shiny: que de vez en cuando, al buscar o al cargar, algún Pokémon salga shiny, como en los juegos originales (allí la probabilidad es 1 entre 4096, y 1 entre 8192 en los más antiguos). Se podría hacer con `Math.random()` y los sprites `front_shiny` y `back_shiny`, que ya vienen en la API.
+- Unas barras para las estadísticas en el panel de detalles, para ver de un vistazo si un Pokémon es más de ataque, de defensa o de velocidad. Quedaría bastante guapo.
+- Poder ordenar los Pokémon por tipo para que salgan agrupados por colores.
+
