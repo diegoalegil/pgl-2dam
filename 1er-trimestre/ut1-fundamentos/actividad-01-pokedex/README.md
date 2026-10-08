@@ -7,6 +7,41 @@
 
 Es una Pokédex con los 151 Pokémon de Kanto hecha con HTML, CSS y JavaScript, con los datos de PokéAPI. Parte de la mini-Pokédex de la práctica guiada.
 
+## Cómo ejecutarla
+
+1. Clona el repositorio: `git clone https://github.com/diegoalegil/pgl-2dam.git`
+2. Abre la carpeta `1er-trimestre/ut1-fundamentos/actividad-01-pokedex` en Visual Studio Code.
+3. Abre `index.html` con Live Server (clic derecho → "Open with Live Server"). Si no la tienes, instala la extensión Live Server en VS Code. Con doble clic no funciona porque `app.js` es un módulo y necesita un servidor.
+4. Pulsa "Cargar Pokémon". Hace falta conexión a internet porque los datos vienen de PokéAPI.
+
+## Estructura del proyecto
+
+```text
+actividad-01-pokedex/
+├── index.html
+├── README.md
+├── assets/
+│   ├── images/
+│   │   └── pokeball.png   (cursor de los botones e icono de la pestaña)
+│   └── readme/            (capturas de este README)
+├── css/
+│   └── style.css
+└── js/
+    ├── app.js             (lo que pasa en la página: carga, tarjetas, filtros y panel)
+    └── Pokemon.js         (la clase con los datos que uso de cada Pokémon)
+```
+
+## Funcionalidades
+
+- Carga los 151 Pokémon de la primera generación desde PokéAPI, todos a la vez con `Promise.all`.
+- Mensajes de estado: listo para empezar, cargando, cargados, sin resultados y error de conexión con botón "Reintentar".
+- Una tarjeta por Pokémon con número, nombre, sprite, tipos (cada uno con su color), altura en metros y peso en kilos.
+- La tarjeta enseña el sprite de espaldas y al pasar el cursor se da la vuelta.
+- Búsqueda por nombre, trozo del nombre o número, mientras escribes o con Enter.
+- Filtro por tipo, que se puede usar junto con la búsqueda.
+- Panel "Ver detalles" con la imagen oficial, la experiencia base, las habilidades y las estadísticas base.
+- Se adapta al móvil.
+
 ## 1. Punto de partida
 
 ### Qué hacía la mini-Pokédex
@@ -24,7 +59,7 @@ actividad-01-pokedex/
     └── app.js
 ```
 
-Estos tres archivos son los de la guía sin cambiar nada. En el mismo commit añadí el `README.md`, `js/Pokemon.js` (vacío de momento) y la carpeta `assets/images/`, que es la estructura que pide la actividad.
+Estos tres archivos son los de la guía sin cambiar nada. La versión de la guía la dejé además sin tocar en la carpeta `1er-trimestre/ut1-fundamentos/mini-pokedex`. En el mismo commit añadí el `README.md`, `js/Pokemon.js` (vacío de momento) y la carpeta `assets/images/`, que es la estructura que pide la actividad.
 
 ### Funcionalidades que ya estaban
 
@@ -69,7 +104,7 @@ En la consola también me salía un `Uncaught (in promise) Error: Could not esta
 ### Cambios respecto al código inicial
 
 - En el HTML metí el título y la explicación dentro de un `<header>`, cambié el título a "Pokédex de Diego" y puse una explicación nueva de cómo se usa.
-- Añadí el botón "Cargar Pokémon" con `type="button"`, para que nunca envíe el formulario, y un desplegable `<select>` para filtrar por tipo, de momento solo con la opción "Todos".
+- Añadí el botón "Cargar Pokémon", fuera del formulario y con `type="button"`, y un desplegable `<select>` para filtrar por tipo, de momento solo con la opción "Todos".
 - El mensaje ahora empieza con `Pulsa "Cargar Pokémon" para empezar.`
 - En el CSS puse la cabecera roja con el título en blanco, el contenedor más ancho (1100 px) para que luego quepan las tarjetas, estilos para el botón nuevo y el desplegable, y una Poké Ball como cursor en los botones. La imagen es la de PokéAPI y está en `assets/images/pokeball.png`.
 - Creé la clase `Pokemon` en `js/Pokemon.js` y la importé en `app.js`. Para poder usar `import` tuve que poner `type="module"` en el `<script>` del HTML.
@@ -106,8 +141,8 @@ const obtenerListaPokemon = async () => {
     peticiones.push(obtenerPokemon(id));
   }
 
-  const listaPokemon = await Promise.all(peticiones);
-  return listaPokemon;
+  const lista = await Promise.all(peticiones);
+  return lista;
 };
 ```
 
@@ -133,7 +168,9 @@ Para probar el error usé Chrome: en la pestaña Red marqué "Inhabilitar caché
 
 ![Mientras cargan los Pokémon](assets/readme/02-cargando.png)
 
-![Los 151 Pokémon cargados](assets/readme/02-cargados.png)
+![Mensaje al terminar de cargar los 151](assets/readme/02-cargados.png)
+
+En esta fase todavía no salían las tarjetas. Lo comprobé con el mensaje y con los `console.log` (151, de Bulbasaur a Mew). Las tarjetas se ven en el apartado 3.
 
 ![Error al cargar sin conexión y botón Reintentar](assets/readme/02-error-conexion.png)
 
@@ -206,7 +243,7 @@ La búsqueda de la guía preguntaba a la API por un solo Pokémon. Ahora que ya 
 
 Todo está en la función `aplicarFiltros`:
 
-1. Coge el texto del buscador con `trim()` y `toLowerCase()`, como en la guía, para que dé igual poner mayúsculas o espacios.
+1. Coge el texto del buscador con `trim()` y `toLowerCase()`, como en la guía, para que dé igual poner mayúsculas o espacios. También cambio el espacio por un guion, para que "mr mime" encuentre a `mr-mime` (en la tarjeta sale "Mr mime").
 2. Con `filter` se queda con los Pokémon que coinciden. Un Pokémon coincide si:
    - el buscador está vacío,
    - o su nombre contiene el texto (`includes`), así funcionan los trozos como "char",
@@ -215,7 +252,7 @@ Todo está en la función `aplicarFiltros`:
 
 La búsqueda se hace mientras escribes (evento `input`) y también al pulsar "Buscar" o Enter (evento `submit`, con `preventDefault()` para que no se recargue la página). Si borras todo vuelven a salir los 151.
 
-Si todavía no se han cargado los Pokémon sale `Primero pulsa "Cargar Pokémon".`
+Si todavía no se han cargado los Pokémon sale "Todavía no hay Pokémon cargados."
 
 ### Filtro por tipo
 
@@ -235,7 +272,7 @@ Por ejemplo, "char" con el tipo Flying solo deja a Charizard.
 
 ### Mensajes
 
-- Si hay resultados sale cuántos se muestran, por ejemplo "Se muestran 3 de 151 Pokémon.".
+- Si hay resultados sale cuántos se muestran, por ejemplo "Mostrando 3 de 151 Pokémon.".
 - Si no hay ninguno sale "No hay ningún Pokémon que coincida con la búsqueda." y no queda ninguna tarjeta.
 
 ### Capturas
@@ -290,4 +327,76 @@ Como los tipos ahora salen en la tarjeta y en el panel, saqué el código que lo
 ![Después de cerrar el panel](assets/readme/05-detalles-cerrado.png)
 
 **Commit de la fase:** [`26a15ba`](https://github.com/diegoalegil/pgl-2dam/commit/26a15ba61e1d256fef7c6c246bf84577778dc57a)
+
+## 6. Gestión de estados y errores
+
+La aplicación tiene estos estados y cada uno tiene su mensaje en el párrafo `#mensaje`, que tiene `aria-live="polite"` para que los lectores de pantalla lo lean:
+
+| Estado | Qué sale |
+|---|---|
+| Preparada para empezar | `Pulsa "Cargar Pokémon" para empezar.` |
+| Cargando | "Cargando Pokémon..." y el botón desactivado |
+| Cargada | "Se han cargado 151 Pokémon." y el botón desaparece |
+| Búsqueda sin resultados | "No hay ningún Pokémon que coincida con la búsqueda." y ninguna tarjeta |
+| Error de conexión | "No se han podido cargar los Pokémon. Revisa tu conexión a internet e inténtalo de nuevo." y el botón pasa a "Reintentar" |
+
+Si se busca antes de cargar sale "Todavía no hay Pokémon cargados."
+
+Los errores se recogen con `try` y `catch`. En la página nunca sale el error técnico: el usuario ve una frase que se entiende y el error de verdad (`TypeError: Failed to fetch`) solo sale en la consola con `console.error`. Como el botón se vuelve a activar en el `finally`, la aplicación no se queda bloqueada y se puede reintentar.
+
+Capturas de los estados:
+
+![Cargando](assets/readme/02-cargando.png)
+
+![Error de conexión con Reintentar](assets/readme/02-error-conexion.png)
+
+![Búsqueda sin resultados](assets/readme/04-sin-resultados.png)
+
+## 7. Pruebas finales
+
+| N.º | Prueba | Resultado esperado | ¿Superada? |
+|---|---|---|---|
+| 1 | Abrir la aplicación | Se muestra la interfaz inicial sin errores | Sí |
+| 2 | Iniciar la carga | Aparece un mensaje de carga | Sí |
+| 3 | Finalizar la consulta | Se muestran 151 tarjetas | Sí |
+| 4 | Buscar `pikachu` | Solo aparece Pikachu | Sí |
+| 5 | Buscar `25` | Solo aparece Pikachu | Sí |
+| 6 | Buscar `char` | Aparecen los Pokémon cuyo nombre contiene ese fragmento | Sí (Charmander, Charmeleon y Charizard) |
+| 7 | Buscar un nombre inexistente | Se muestra un mensaje sin errores técnicos | Sí |
+| 8 | Vaciar la búsqueda | Vuelven a mostrarse todos los Pokémon | Sí |
+| 9 | Seleccionar el tipo `fire` | Solo aparecen Pokémon de tipo fuego | Sí (12) |
+| 10 | Combinar texto y tipo | Se cumplen simultáneamente ambos filtros | Sí ("char" + Flying solo deja a Charizard) |
+| 11 | Colocar el cursor sobre una tarjeta | El sprite cambia de espalda a frente | Sí, y sin ninguna petición nueva |
+| 12 | Retirar el cursor | Vuelve a mostrarse el sprite trasero | Sí |
+| 13 | Pulsar `Ver detalles` | Aparece toda la información ampliada solicitada | Sí |
+| 14 | Cerrar los detalles | El panel desaparece sin recargar la página | Sí (con el botón, con Esc o pinchando fuera) |
+| 15 | Simular un fallo de conexión | Aparece un mensaje y se puede reintentar | Sí |
+| 16 | Reducir el ancho de la ventana | Las tarjetas se adaptan sin desbordamientos | Sí (6 columnas en el ordenador, 4 en tablet, 2 en el móvil y 1 en pantallas muy pequeñas) |
+
+### Pruebas de la guía después de los cambios
+
+También volví a pasar las pruebas de la práctica guiada. Ahora la búsqueda filtra la colección en vez de preguntar a la API, así que dos cambian a propósito. Además, `mr-mime` ahora sale sin guion por `formatearTexto` (apartado 3):
+
+| Entrada | Antes (guía) | Ahora |
+|---|---|---|
+| `pikachu`, `PIKACHU`, `   pikachu   `, `25` | Pikachu | Pikachu |
+| `charizard` | Dos tipos | Dos tipos |
+| `mr-mime` | "Mr-Mime" con guion | "Mr mime" |
+| Campo vacío o solo espacios | Aviso "Introduce un nombre o número." | Salen los 151, porque el enunciado pide que al vaciar la búsqueda vuelvan todos |
+| `pokemon-inventado` | "Pokémon no encontrado." | "No hay ningún Pokémon que coincida con la búsqueda." |
+
+### Correcciones después de las pruebas
+
+- En la consola salía un error 404 de `favicon.ico` porque la página no tenía icono. Lo arreglé poniendo la Poké Ball como icono de la pestaña y ya no sale ningún error en el uso normal. Commit: [`9d48637`](https://github.com/diegoalegil/pgl-2dam/commit/9d48637b736719f0e4d2c07ec14cec37d590b55e)
+
+Al repasarlo todo encontré algunas cosas más y las arreglé en el commit [`e9d33f8`](https://github.com/diegoalegil/pgl-2dam/commit/e9d33f82dd8044c232c1bf5dbd0f59e863482cc2):
+
+- Buscar "mr mime" o "nidoran f" como sale en la tarjeta no encontraba nada, porque en la API llevan guion. Ahora el espacio se cambia por un guion.
+- Si escribías algo antes de cargar, al cargar salían los 151 con el texto todavía en el buscador. Ahora el buscador se vacía al cargar.
+- Si buscabas antes de cargar salía `Primero pulsa "Cargar Pokémon".` aunque ya estuviera cargando o hubiera fallado. Ahora sale "Todavía no hay Pokémon cargados.", que vale para todos los casos.
+- Con un solo resultado salía "Se muestran 1 de 151 Pokémon.", que suena mal. Ahora sale "Mostrando 1 de 151 Pokémon.".
+- En el móvil, si bajabas en el panel de detalles y abrías otro Pokémon, el nuevo salía ya bajado. Ahora siempre se abre arriba (`panelDetalles.scrollTop = 0`).
+- Algunos colores de tipo eran muy claros para el texto blanco (fire, grass, water...). Los oscurecí un poco para que se lean mejor.
+- La constante `URL_API` no se usaba: `obtenerPokemon` volvía a escribir la URL entera. Ahora la usa.
+- Dentro de `obtenerListaPokemon` había una variable que se llamaba igual que la lista de fuera (`listaPokemon`) y liaba al leerlo. La cambié a `lista`.
 
