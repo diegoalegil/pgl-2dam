@@ -254,3 +254,40 @@ Por ejemplo, "char" con el tipo Flying solo deja a Charizard.
 
 **Commit de la fase:** [`ea07636`](https://github.com/diegoalegil/pgl-2dam/commit/ea076368840e0685ab43729b324585636b43c503)
 
+## 5. Información ampliada
+
+### Datos nuevos en la clase
+
+Para el panel necesitaba dos cosas que todavía no guardaba, así que las añadí a la clase `Pokemon`, otra vez con `map`:
+
+```javascript
+this.habilidades = datos.abilities.map((elemento) => elemento.ability.name);
+this.estadisticas = datos.stats.map((elemento) => {
+  return { nombre: elemento.stat.name, valor: elemento.base_stat };
+});
+```
+
+En las estadísticas guardo un objeto pequeño con el nombre y el valor de cada una. Como la API las da en inglés (`hp`, `attack`, `special-attack`...), en `app.js` hice un objeto `NOMBRES_ESTADISTICAS` para enseñarlas en español: Puntos de salud, Ataque, Defensa, Ataque especial, Defensa especial y Velocidad.
+
+### El panel
+
+Para el panel he usado la etiqueta `<dialog>` de HTML, que ya sirve para hacer ventanas que se abren encima de la página:
+
+- Cada tarjeta tiene un botón "Ver detalles" con el número del Pokémon guardado en `data-id`.
+- Después de pintar las tarjetas, `mostrarTarjetas` le pone un `click` a cada botón. Al pulsarlo, busca el Pokémon en la lista con `find` y llama a `mostrarDetalles`.
+- `mostrarDetalles` monta el contenido con una plantilla literal y abre el panel con `showModal()`.
+
+El panel enseña el número, el nombre, la imagen oficial en grande, los tipos, la altura, el peso, la experiencia base, las habilidades y las seis estadísticas base.
+
+Se puede cerrar sin recargar la página de tres formas: con el botón "Cerrar" (`close()`), con la tecla Esc (eso ya lo hace el `<dialog>` solo) o pinchando fuera del panel.
+
+Como los tipos ahora salen en la tarjeta y en el panel, saqué el código que los pinta a una función `crearTiposHTML` para no repetirlo.
+
+### Capturas
+
+![Panel de detalles de Pikachu abierto](assets/readme/05-detalles.png)
+
+![Después de cerrar el panel](assets/readme/05-detalles-cerrado.png)
+
+**Commit de la fase:** [`26a15ba`](https://github.com/diegoalegil/pgl-2dam/commit/26a15ba61e1d256fef7c6c246bf84577778dc57a)
+
