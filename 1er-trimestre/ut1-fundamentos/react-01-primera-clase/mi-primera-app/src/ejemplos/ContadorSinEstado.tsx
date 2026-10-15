@@ -1,6 +1,3 @@
-// Ejemplo de clase antes de useState: en la consola el contador sube,
-// pero en la página sigue saliendo 0 porque es una variable normal
-
 function ContadorSinEstado() {
   let contador = 0;
 

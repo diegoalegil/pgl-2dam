@@ -1,4 +1,3 @@
-/* Contenedor principal */
 .app {
   max-width: 1180px;
   margin: 0 auto;
@@ -6,7 +5,6 @@
   text-align: center;
 }
 
-/* Título con degradado morado y rosa */
 .app h1 {
   margin: 0;
   font-size: clamp(56px, 10vw, 112px);
@@ -21,7 +19,6 @@
   animation: brillo 8s linear infinite;
 }
 
-/* Subtítulo */
 .app > p {
   margin: 24px auto 56px;
   max-width: 640px;
@@ -31,7 +28,6 @@
   color: #dcb8ff;
 }
 
-/* Botones de los filtros */
 .app > button {
   margin: 0 6px 56px;
   padding: 12px 24px;
@@ -61,14 +57,12 @@
   outline-offset: 3px;
 }
 
-/* Cuadrícula del catálogo */
 .catalog {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 20px;
 }
 
-/* Tarjeta de cada videojuego */
 .card {
   position: relative;
   overflow: hidden;
@@ -82,7 +76,6 @@
   animation: aparecer 0.6s ease-out both;
 }
 
-/* Luz morada que aparece arriba al pasar el ratón */
 .card::before {
   content: "";
   position: absolute;
@@ -93,7 +86,6 @@
   pointer-events: none;
 }
 
-/* Al pasar el ratón: sube y se ilumina el contorno, como un neón */
 .card:hover {
   transform: translateY(-6px);
   border-color: var(--morado);
@@ -122,7 +114,6 @@
   color: var(--gris);
 }
 
-/* Género (primer párrafo) */
 .card p:first-of-type {
   font-size: 12px;
   font-weight: 600;
@@ -131,14 +122,12 @@
   color: var(--morado);
 }
 
-/* Precio (segundo párrafo) */
 .card p:nth-of-type(2) {
   font-size: 17px;
   font-weight: 600;
   color: var(--texto);
 }
 
-/* Disponible / No disponible: una barra de vida como en los juegos */
 .card .status {
   margin-top: 20px;
   font-size: 12px;
@@ -172,7 +161,6 @@
   background: linear-gradient(90deg, var(--rojo) 12%, rgba(255, 255, 255, 0.08) 12%);
 }
 
-/* Los juegos no disponibles salen apagados, como bloqueados */
 .card:has(.unavailable) {
   filter: grayscale(0.7);
   opacity: 0.6;
@@ -183,7 +171,6 @@
   opacity: 1;
 }
 
-/* Animaciones */
 @keyframes brillo {
   to {
     background-position: 200% center;
@@ -204,7 +191,6 @@
   }
 }
 
-/* Móvil */
 @media (max-width: 600px) {
   .app {
     padding: 64px 16px 80px;

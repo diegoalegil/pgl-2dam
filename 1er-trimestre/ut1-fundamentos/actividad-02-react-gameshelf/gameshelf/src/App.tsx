@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./App.css";
 import GameCard from "./components/GameCard";
 
@@ -27,12 +28,29 @@ const games: Game[] = [
 ];
 
 function App() {
+  const [onlyAvailable, setOnlyAvailable] = useState(false);
+  const [onlyUnder15, setOnlyUnder15] = useState(false);
+
+  const visibleGames = onlyAvailable
+    ? games.filter((game) => game.available)
+    : games;
+
+  const filteredGames = onlyUnder15
+    ? visibleGames.filter((game) => game.price < 15)
+    : visibleGames;
+
   return (
     <main className="app">
       <h1>GameShelf</h1>
       <p>Mi catálogo de videojuegos</p>
+      <button onClick={() => setOnlyAvailable(!onlyAvailable)}>
+        {onlyAvailable ? "Mostrar todos" : "Mostrar disponibles"}
+      </button>
+      <button onClick={() => setOnlyUnder15(!onlyUnder15)}>
+        {onlyUnder15 ? "Todos los precios" : "Menos de 15 €"}
+      </button>
       <section className="catalog">
-        {games.map((game) => (
+        {filteredGames.map((game) => (
           <GameCard
             key={game.id}
             title={game.title}
