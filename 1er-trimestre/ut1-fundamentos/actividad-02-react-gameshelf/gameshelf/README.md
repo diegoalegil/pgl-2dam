@@ -22,8 +22,6 @@ GameShelf es mi primera aplicación con React: una página con un catálogo de v
 
 Primero comprobé que tenía instalados Node.js y npm con `node --version` y `npm --version`. Tengo Node v22.22.2 y npm 10.9.7.
 
-![Versiones de Node.js y npm](capturas/01-node-npm.png)
-
 ### Crear el proyecto con Vite
 
 Desde la carpeta de la actividad creé el proyecto con:
@@ -39,12 +37,6 @@ cd gameshelf
 npm install
 npm run dev
 ```
-
-![npm install y npm run dev en la terminal](capturas/01-npm-install-dev.png)
-
-Esta es la pantalla de ejemplo que trae Vite en `http://localhost:5173/`:
-
-![Pantalla inicial de Vite](capturas/01-vite-inicial.png)
 
 ### Qué es cada herramienta
 
