@@ -1,19 +1,19 @@
 import './App.css'
+import { useState } from 'react';
 import Saludo from './components/Saludo';
 
 function App() {
-  const nombre = "Sara";
-  const edad = "31";
+  const [contador, setContador] = useState(0);
 
-  function saludar(){
-    alert("¡Hola, " + nombre + "¡")
+  function incrementar () {
+    setContador (contador + 1);
   }
-  return (
-    <main>
-        <h1>Bienvenida, {nombre}</h1>
-        <Saludo nombre="Diego" />
-        <Saludo nombre="Jorge" />
-    </main>
+
+  return(
+    <div>
+        <p>Contador: {contador}</p>
+        <button onClick={incrementar}>Contador</button>
+    </div>
   )
 }
 
