@@ -38,6 +38,8 @@ npm install
 npm run dev
 ```
 
+![npm install y npm run dev en la terminal](capturas/01-npm-install-dev.png)
+
 ### Qué es cada herramienta
 
 **¿Qué es React? ¿Es un lenguaje, una biblioteca o una herramienta para crear proyectos?**
