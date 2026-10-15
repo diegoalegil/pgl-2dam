@@ -201,3 +201,28 @@ Elegí los juegos porque los he jugado y todos me gustan. Dejé los tres de ejem
 ![Código del array y catálogo ampliado](capturas/04-codigo-catalogo.png)
 
 **Commits:** [`f2386e4`](https://github.com/diegoalegil/pgl-2dam/commit/f2386e4aae5eb08019bad64d76bc587109dcc331) (tres tarjetas con map), [`aa04cd4`](https://github.com/diegoalegil/pgl-2dam/commit/aa04cd4f18f04f094b56793c920e0fdc4055f031) (catálogo ampliado) y [`ae7a5a8`](https://github.com/diegoalegil/pgl-2dam/commit/ae7a5a8fffc578bbc14bf6a4dcdb6a6fc0e6e02e) (cambio de algunos juegos)
+
+## 5. Estilos CSS
+
+**¿Qué es CSS?** El lenguaje para darle estilo a la página: colores, tamaños, espacios, posiciones…
+
+**¿Qué es un selector?** La parte de la regla que dice a qué elementos se aplica. Por ejemplo, `.card` se aplica a todo lo que tiene `className="card"`, y `.card h2` solo al título de dentro de cada tarjeta.
+
+**¿Qué es una propiedad CSS?** Lo que cambias del elemento, con su valor. Por ejemplo, `color: var(--morado)` o `border-radius: 24px` (las esquinas redondeadas).
+
+**¿Dónde escribí los estilos?** En `index.css` puse lo general de toda la página: el fondo, la fuente y los colores guardados en variables como `--morado` o `--rosa`. En `App.css` puse el diseño: el título, la cuadrícula y las tarjetas.
+
+**¿Cómo conecté className con el CSS?** En el TSX pongo `className="card"` y en el CSS la regla `.card { ... }`, con un punto delante, que quiere decir "clase". En JSX se escribe `className` porque `class` es una palabra reservada de JavaScript (las clases, como `class Pokemon`). Para "Disponible" uso un ternario que elige la clase: `available` (verde) o `unavailable` (rojo).
+
+**Lo que más me gusta del diseño:**
+
+- el título con degradado morado y rosa (`linear-gradient` + `background-clip: text`),
+- las tarjetas que suben y se iluminan como un neón al pasar el ratón (`:hover` + `transform` + `box-shadow`),
+- la disponibilidad como una barra de vida de videojuego (`::after`, un elemento "falso" que creo desde el CSS),
+- que los juegos no disponibles salgan apagados, como bloqueados (`:has()` + `filter: grayscale`).
+
+**Commits:** [`b565244`](https://github.com/diegoalegil/pgl-2dam/commit/b565244) (diseño) y [`c752b1b`](https://github.com/diegoalegil/pgl-2dam/commit/c752b1b) (barra de vida y contorno iluminado)
+
+## Lo que falta
+
+Lo siguiente, en la sesión 3: el botón para ver solo los juegos disponibles (`useState` + `filter`), el reto de los juegos de menos de 15 €, el glosario y la reflexión final.
