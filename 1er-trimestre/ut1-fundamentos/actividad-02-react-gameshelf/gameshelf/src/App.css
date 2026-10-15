@@ -23,10 +23,12 @@
 
 /* Subtítulo */
 .app > p {
-  margin: 20px auto 56px;
-  max-width: 560px;
-  font-size: 22px;
-  color: var(--gris);
+  margin: 24px auto 56px;
+  max-width: 640px;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #dcb8ff;
 }
 
 /* Botones de los filtros */
@@ -76,7 +78,7 @@
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(20px);
   text-align: left;
-  transition: transform 0.35s, border-color 0.35s, box-shadow 0.35s;
+  transition: transform 0.35s, border-color 0.35s, box-shadow 0.35s, opacity 0.35s, filter 0.35s;
   animation: aparecer 0.6s ease-out both;
 }
 
@@ -91,10 +93,14 @@
   pointer-events: none;
 }
 
+/* Al pasar el ratón: sube y se ilumina el contorno, como un neón */
 .card:hover {
   transform: translateY(-6px);
-  border-color: rgba(191, 90, 242, 0.5);
-  box-shadow: 0 24px 60px -24px rgba(255, 55, 95, 0.55);
+  border-color: var(--morado);
+  box-shadow:
+    0 0 0 1px var(--morado),
+    0 0 20px rgba(191, 90, 242, 0.7),
+    0 0 50px rgba(255, 55, 95, 0.35);
 }
 
 .card:hover::before {
@@ -132,19 +138,49 @@
   color: var(--texto);
 }
 
-/* Disponible / No disponible */
+/* Disponible / No disponible: una barra de vida como en los juegos */
 .card .status {
-  margin-top: 16px;
-  font-size: 14px;
-  font-weight: 600;
+  margin-top: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.card .status::after {
+  content: "";
+  display: block;
+  height: 6px;
+  margin-top: 8px;
+  border-radius: 999px;
 }
 
 .card .available {
   color: var(--verde);
 }
 
+.card .available::after {
+  background: linear-gradient(90deg, var(--verde), #7dffa1);
+  box-shadow: 0 0 12px rgba(48, 209, 88, 0.6);
+}
+
 .card .unavailable {
   color: var(--rojo);
+}
+
+.card .unavailable::after {
+  background: linear-gradient(90deg, var(--rojo) 12%, rgba(255, 255, 255, 0.08) 12%);
+}
+
+/* Los juegos no disponibles salen apagados, como bloqueados */
+.card:has(.unavailable) {
+  filter: grayscale(0.7);
+  opacity: 0.6;
+}
+
+.card:has(.unavailable):hover {
+  filter: none;
+  opacity: 1;
 }
 
 /* Animaciones */
@@ -175,7 +211,6 @@
   }
 
   .app > p {
-    font-size: 18px;
     margin-bottom: 40px;
   }
 }
