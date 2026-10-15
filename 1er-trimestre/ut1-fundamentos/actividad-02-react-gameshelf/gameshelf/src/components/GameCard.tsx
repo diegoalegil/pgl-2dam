@@ -16,7 +16,9 @@ export default function GameCard({
       <h2>{title}</h2>
       <p>Género: {genre}</p>
       <p>Precio: {price} €</p>
-      <p>{available ? "Disponible" : "No disponible"}</p>
+      <p className={available ? "status available" : "status unavailable"}>
+        {available ? "Disponible" : "No disponible"}
+      </p>
     </article>
   );
 }
