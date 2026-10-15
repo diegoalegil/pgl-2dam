@@ -11,8 +11,8 @@ function App() {
   return (
     <main>
         <h1>Bienvenida, {nombre}</h1>
-        <Saludo />
-        <Saludo />
+        <Saludo nombre="Diego" />
+        <Saludo nombre="Jorge" />
     </main>
   )
 }
