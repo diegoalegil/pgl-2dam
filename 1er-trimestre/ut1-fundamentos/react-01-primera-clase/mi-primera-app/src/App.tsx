@@ -1,4 +1,5 @@
 import './App.css'
+import Saludo from './components/Saludo';
 
 function App() {
   const nombre = "Sara";
@@ -10,9 +11,8 @@ function App() {
   return (
     <main>
         <h1>Bienvenida, {nombre}</h1>
-        <p>Tienes {edad} años</p>
-
-        <button onClick={saludar}>Saludar</button>
+        <Saludo />
+        <Saludo />
     </main>
   )
 }
