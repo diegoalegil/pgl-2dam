@@ -130,3 +130,74 @@ type GameCardProps = {
 Al crear `GameCard` la página sigue mostrando lo mismo que antes, porque todavía no hemos usado `GameCard` en `App`.
 
 **Commits:** [`64af59d`](https://github.com/diegoalegil/pgl-2dam/commit/64af59dc22ff69733b98fae86abeb458cd2c4a6c) (pantalla inicial) y [`4e9a72c`](https://github.com/diegoalegil/pgl-2dam/commit/4e9a72c731eab8097aae8dbcff58df832acb4d64) (GameCard)
+
+## 4. Catálogo con map()
+
+### Los datos
+
+En `App.tsx` creé el tipo `Game`, que dice cómo es cada videojuego, y el array `games`, que es una lista de juegos (`Game[]`):
+
+```tsx
+type Game = {
+  id: number;
+  title: string;
+  genre: string;
+  price: number;
+  available: boolean;
+};
+```
+
+Primero puse los tres de ejemplo (Hollow Knight, Celeste y Stardew Valley) y comprobé que salían las tres tarjetas.
+
+### Mostrar las tarjetas con map()
+
+```tsx
+{games.map((game) => (
+  <GameCard
+    key={game.id}
+    title={game.title}
+    genre={game.genre}
+    price={game.price}
+    available={game.available}
+  />
+))}
+```
+
+**¿Qué hace map()?** Recorre el array `games` y transforma cada juego en un componente `GameCard`. Es lo mismo que hacía en la Pokédex para crear las tarjetas.
+
+**¿Para qué sirve key?** Es un identificador único de cada tarjeta (el `id` del juego). React lo usa para saber qué tarjeta es cada una cuando la lista cambia, por ejemplo al filtrar.
+
+**¿Qué es una función?** Un bloque de instrucciones que se ejecuta cuando la llamo.
+
+**¿Qué diferencia hay entre definirla y llamarla?** Definirla es escribirla (`function saludar() {...}`). Llamarla es ejecutarla, con su nombre y paréntesis (`saludar()`).
+
+**¿Qué recibe `game` en cada vuelta?** Un juego distinto del array: en la primera Hollow Knight, en la segunda Celeste, y así hasta el último.
+
+**¿Qué devuelve la función flecha dentro de map()?** Un `GameCard` con los datos de ese juego.
+
+Fuente: [Mostrar listas en React](https://react.dev/learn/rendering-lists)
+
+### Mis videojuegos
+
+Elegí los juegos porque los he jugado y todos me gustan. Dejé los tres de ejemplo y añadí once más, mezclando disponibles y no disponibles, y baratos y caros, para que se noten los filtros. Los precios son aproximados de las tiendas. En total hay 14:
+
+| Juego | Género | Precio | Disponible |
+|---|---|---|---|
+| Hollow Knight | Aventura | 14,99 € | Sí |
+| Celeste | Plataformas | 19,99 € | Sí |
+| Stardew Valley | Simulación | 13,99 € | No |
+| Valorant | Shooter | 0 € | Sí |
+| EA Sports FC 27 | Deportes | 69,99 € | Sí |
+| Minecraft | Supervivencia | 29,99 € | Sí |
+| Pokémon Púrpura | RPG | 59,99 € | Sí |
+| Zelda: Tears of the Kingdom | Aventura | 69,99 € | No |
+| Geometry Dash | Ritmo | 4,99 € | Sí |
+| Among Us | Party | 3,99 € | No |
+| Spider-Man 2 | Acción | 69,99 € | Sí |
+| God of War Ragnarök | Acción | 69,99 € | No |
+| Cuphead | Plataformas | 19,99 € | Sí |
+| Undertale | RPG | 9,99 € | No |
+
+![Código del array y catálogo ampliado](capturas/04-codigo-catalogo.png)
+
+**Commits:** [`f2386e4`](https://github.com/diegoalegil/pgl-2dam/commit/f2386e4aae5eb08019bad64d76bc587109dcc331) (tres tarjetas con map), [`aa04cd4`](https://github.com/diegoalegil/pgl-2dam/commit/aa04cd4f18f04f094b56793c920e0fdc4055f031) (catálogo ampliado) y [`ae7a5a8`](https://github.com/diegoalegil/pgl-2dam/commit/ae7a5a8fffc578bbc14bf6a4dcdb6a6fc0e6e02e) (cambio de algunos juegos)
