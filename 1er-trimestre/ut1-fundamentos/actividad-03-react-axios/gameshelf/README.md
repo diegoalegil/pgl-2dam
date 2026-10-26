@@ -364,3 +364,34 @@ Fuente: [Object types en TypeScript](https://www.typescriptlang.org/docs/handboo
 Con `slice(0, 20)`, que devuelve una copia con los 20 primeros sin cambiar la lista original. Lo tengo en una constante `LIMITE_JUEGOS` para cambiarlo fácil. Otra forma es pedir menos a la API con `?_limit=20` en la URL, pero eso depende de que el servidor lo permita.
 
 Fuente: [Array.slice en MDN](https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)
+
+## 8. Comprobaciones
+
+| Comprobación | Cómo lo comprobé | Resultado |
+|---|---|---|
+| La aplicación se inicia | `npm run dev` y abrir `http://localhost:5173/` | ✅ Arranca sin errores. `npm run build` y `npm run lint` también pasan |
+| Aparecen juegos después de recibir la respuesta | DevTools → Red: la petición a `switch/games` da 200 y después salen las tarjetas | ✅ Salen 20 tarjetas |
+| Los nombres y géneros vienen de la API | La primera tarjeta es "#Breakforcist Battle" con género "Party", igual que el primer juego del JSON. En `App.tsx` ya no hay ninguna lista escrita a mano | ✅ |
+| Se ve un indicador mientras carga | Red lenta en DevTools | ✅ Sale "Cargando videojuegos..." |
+| Hay un mensaje claro si falla | Cortando la petición, como si no hubiera internet | ✅ Sale el recuadro rojo con el mensaje |
+| La consola no muestra errores | Consola de DevTools con la app funcionando normal | ✅ Sin errores, solo los mensajes de Vite y el aviso de React DevTools |
+
+Cuando fuerzo el error, en la consola sí sale el error de Axios ("Network Error"), pero es normal: es el `console.error` que puse yo en el `catch` para saber qué pasó.
+
+## 9. Dificultades y lo que he aprendido
+
+- Al principio pensé que `genre` era un texto, como en mi GameShelf, pero en la API es una lista. Si lo pintas tal cual los géneros salen pegados, así que tuve que usar `join(", ")`.
+- Me costó entender por qué la función de `useEffect` no puede ser `async` directamente. La solución es crear la función `async` dentro y llamarla.
+- Me sorprendió ver dos peticiones en la pestaña Red. Investigando vi que es por el `StrictMode` y que en la versión final solo hay una.
+- He aprendido a pedir datos a una API con Axios, a guardarlos en el estado para que React repinte la página, y a tener en cuenta que mientras llegan los datos la página tiene que decir algo, y que la petición puede fallar.
+- Como mejora, se podría añadir un botón de "Reintentar" cuando falla, o mostrar más datos de cada juego, como la fecha de salida en Europa.
+
+## Fuentes
+
+- [Axios: documentación oficial](https://axios.rest/)
+- [npm install](https://docs.npmjs.com/cli/commands/npm-install) y [package.json](https://docs.npmjs.com/cli/configuring-npm/package-json)
+- [React: useState](https://react.dev/reference/react/useState), [useEffect](https://react.dev/reference/react/useEffect) y [Renderizar listas](https://react.dev/learn/rendering-lists)
+- [MDN: Promise](https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Promise) y [Array.slice](https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)
+- [TypeScript: Object types](https://www.typescriptlang.org/docs/handbook/2/objects.html)
+- [SampleAPIs: juegos de Switch](https://api.sampleapis.com/switch/games)
+- Apuntes de clase: `03-useeffect-api.md` (useEffect y peticiones a una API)
