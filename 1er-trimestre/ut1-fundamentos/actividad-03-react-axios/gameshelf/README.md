@@ -293,3 +293,74 @@ De paso quité del `App.css` lo que ya no se usaba de la actividad anterior: los
 Así queda la app:
 
 ![GameShelf con los 20 primeros juegos de la API](capturas/06-lista-juegos.png)
+
+## 7. Respuestas a las preguntas
+
+**1. ¿Cómo se importa Axios en un archivo TypeScript?**
+
+Con `import axios from "axios";`. Va sin llaves porque es la exportación por defecto de la librería, y sin `./` porque no es un archivo mío, viene de `node_modules`. Axios ya trae sus tipos, así que no hace falta instalar nada más para TypeScript. Los tipos míos, como `Juego`, se importan aparte con `import type`.
+
+Fuente: [Axios con TypeScript](https://axios.rest/pages/getting-started/examples/typescript)
+
+**2. ¿Cómo se solicita información con una petición GET?**
+
+Con `axios.get(url)`. En mi caso `await axios.get<Juego[]>(URL_API)`. Como devuelve una promesa, la espero con `await` dentro de una función `async`. Lo de `<Juego[]>` es solo para TypeScript, para que sepa qué tipo de datos esperar; no comprueba de verdad lo que llega.
+
+Fuente: [Métodos de petición de Axios](https://axios.rest/pages/advanced/request-method-aliases)
+
+**3. ¿Qué devuelve Axios y dónde están los datos de la respuesta?**
+
+Devuelve una promesa que, cuando termina bien, da un objeto respuesta con varias cosas: `data`, `status` (por ejemplo 200), `statusText`, `headers`, `config` y `request`. Los datos que me interesan están en **`respuesta.data`**, y ya vienen convertidos de JSON, así que en mi caso `respuesta.data` ya es directamente la lista de juegos.
+
+Fuente: [Esquema de la respuesta](https://axios.rest/pages/advanced/response-schema)
+
+**4. ¿Qué significa que una operación sea asíncrona? ¿Qué son una promesa, async y await?**
+
+- **Asíncrona** quiere decir que se lanza una tarea que tarda (como pedir datos a internet) y el programa sigue funcionando mientras tanto, sin quedarse bloqueado esperando. Cuando la respuesta llega, se sigue con ella.
+- Una **promesa** es un valor que todavía no ha llegado pero llegará. Puede estar pendiente (*pending*), cumplida (*fulfilled*) si salió bien, o rechazada (*rejected*) si falló. Es como el ticket de cuando pides una pizza: todavía no tienes la pizza, pero te la darán (o te dirán que no hay).
+- **`async`** se pone delante de una función y hace que siempre devuelva una promesa. Además deja usar `await` dentro.
+- **`await`** espera a que termine la promesa y me da su valor. Si la promesa falla, lanza el error, y por eso lo pongo dentro de un `try/catch`.
+
+Ya lo usé en la Pokédex con `fetch`, aquí es lo mismo pero con Axios.
+
+Fuente: [Promise en MDN](https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+
+**5. ¿Cómo puede React guardar los datos recibidos y actualizar la página?**
+
+Con estado, usando `useState`. Tengo `const [juegos, setJuegos] = useState<Juego[]>([])` y, cuando llegan los datos, hago `setJuegos(respuesta.data)`. Al cambiar el estado con su `set`, React vuelve a pintar el componente y aparecen los juegos. Con una variable normal no funcionaría, porque React no se entera del cambio (igual que pasaba con el contador sin estado que vimos en clase). Uso tres estados: los juegos, si está cargando y el error.
+
+Fuente: [useState](https://react.dev/reference/react/useState)
+
+**6. ¿Cómo se inicia una operación externa, como una petición, cuando se muestra un componente?**
+
+Con `useEffect`. Le paso una función con lo que quiero hacer y un array vacío `[]` al final, que hace que se ejecute solo una vez, cuando el componente se muestra por primera vez. La función de `useEffect` no puede ser `async`, por eso dentro creo `cargarJuegos` y la llamo.
+
+Una cosa que vi: en desarrollo, en la pestaña Red salen **dos** peticiones. Es por el `<StrictMode>` de `main.tsx`, que en desarrollo ejecuta los efectos dos veces para encontrar errores. Al hacer `npm run build` y abrir la versión final sale solo una.
+
+Fuente: [useEffect](https://react.dev/reference/react/useEffect)
+
+**7. ¿Cómo se recorre una lista para mostrar un elemento por videojuego?**
+
+Con `map()`, igual que en la actividad anterior: `juegosVisibles.map((juego) => <GameCard key={juego.id} juego={juego} />)`. Por cada juego de la lista crea una tarjeta. La `key` tiene que ser única para cada elemento, y uso el `id` que viene de la API. Como `genre` también es una lista, para mostrarlo uso `join(", ")`.
+
+Fuente: [Renderizar listas](https://react.dev/learn/rendering-lists)
+
+**8. Como el proyecto usa TypeScript, ¿qué tipo describe los juegos?**
+
+```ts
+export interface Juego {
+  id: number;
+  name: string;
+  genre: string[];
+}
+```
+
+Lo saqué del JSON: `id` es un número, `name` un texto y `genre` una lista de textos. Solo puse los campos que uso en la app. Si quisiera los demás serían `developers: string[]`, `publishers: string[]` y `releaseDates`, que sería un objeto con cuatro textos (`Japan`, `NorthAmerica`, `Europe`, `Australia`). Las fechas serían `string` y no `Date`, porque a veces pone "Unreleased" o "TBA". En Java sería como una clase con `int id`, `String name` y `String[] genre`.
+
+Fuente: [Object types en TypeScript](https://www.typescriptlang.org/docs/handbook/2/objects.html)
+
+**9. ¿Cómo puedes limitar la cantidad de juegos que muestras?**
+
+Con `slice(0, 20)`, que devuelve una copia con los 20 primeros sin cambiar la lista original. Lo tengo en una constante `LIMITE_JUEGOS` para cambiarlo fácil. Otra forma es pedir menos a la API con `?_limit=20` en la URL, pero eso depende de que el servidor lo permita.
+
+Fuente: [Array.slice en MDN](https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)
