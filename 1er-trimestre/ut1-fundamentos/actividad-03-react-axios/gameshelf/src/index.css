@@ -1,0 +1,33 @@
+:root {
+  --fondo: #07060b;
+  --texto: #f5f5f7;
+  --gris: #a1a1a6;
+  --gris-oscuro: #6e6e73;
+  --morado: #bf5af2;
+  --rosa: #ff375f;
+  --verde: #30d158;
+  --rojo: #ff453a;
+  --borde: rgba(255, 255, 255, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--texto);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(900px 500px at 15% -10%, rgba(191, 90, 242, 0.22), transparent 70%),
+    radial-gradient(800px 450px at 90% 0%, rgba(255, 55, 95, 0.14), transparent 70%),
+    var(--fondo);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: var(--rosa);
+  color: white;
+}

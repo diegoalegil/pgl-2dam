@@ -1,0 +1,202 @@
+.app {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 96px 24px 120px;
+  text-align: center;
+}
+
+.app h1 {
+  margin: 0;
+  font-size: clamp(56px, 10vw, 112px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  background: linear-gradient(90deg, var(--morado), var(--rosa), var(--morado));
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: brillo 8s linear infinite;
+}
+
+.app > p {
+  margin: 24px auto 56px;
+  max-width: 640px;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #dcb8ff;
+}
+
+.app > button {
+  margin: 0 6px 56px;
+  padding: 12px 24px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--texto);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+
+.app > button:hover {
+  background: linear-gradient(90deg, var(--morado), var(--rosa));
+  border-color: transparent;
+  box-shadow: 0 12px 32px -10px rgba(255, 55, 95, 0.7);
+}
+
+.app > button:active {
+  transform: scale(0.96);
+}
+
+.app > button:focus-visible {
+  outline: 2px solid var(--morado);
+  outline-offset: 3px;
+}
+
+.catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  padding: 28px;
+  border: 1px solid var(--borde);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  text-align: left;
+  transition: transform 0.35s, border-color 0.35s, box-shadow 0.35s, opacity 0.35s, filter 0.35s;
+  animation: aparecer 0.6s ease-out both;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(400px 160px at 50% 0%, rgba(191, 90, 242, 0.25), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s;
+  pointer-events: none;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: var(--morado);
+  box-shadow:
+    0 0 0 1px var(--morado),
+    0 0 20px rgba(191, 90, 242, 0.7),
+    0 0 50px rgba(255, 55, 95, 0.35);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card h2 {
+  margin: 0 0 18px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--texto);
+}
+
+.card p {
+  margin: 6px 0;
+  font-size: 15px;
+  color: var(--gris);
+}
+
+.card p:first-of-type {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--morado);
+}
+
+.card p:nth-of-type(2) {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.card .status {
+  margin-top: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.card .status::after {
+  content: "";
+  display: block;
+  height: 6px;
+  margin-top: 8px;
+  border-radius: 999px;
+}
+
+.card .available {
+  color: var(--verde);
+}
+
+.card .available::after {
+  background: linear-gradient(90deg, var(--verde), #7dffa1);
+  box-shadow: 0 0 12px rgba(48, 209, 88, 0.6);
+}
+
+.card .unavailable {
+  color: var(--rojo);
+}
+
+.card .unavailable::after {
+  background: linear-gradient(90deg, var(--rojo) 12%, rgba(255, 255, 255, 0.08) 12%);
+}
+
+.card:has(.unavailable) {
+  filter: grayscale(0.7);
+  opacity: 0.6;
+}
+
+.card:has(.unavailable):hover {
+  filter: none;
+  opacity: 1;
+}
+
+@keyframes brillo {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app h1,
+  .card {
+    animation: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: 64px 16px 80px;
+  }
+
+  .app > p {
+    margin-bottom: 40px;
+  }
+}
