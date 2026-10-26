@@ -70,3 +70,44 @@ Miré varios juegos y estos son los campos que pide la actividad:
 Además vienen `developers` y `publishers`, que también son listas de textos. Lo comprobé en los 1043 juegos y todos los campos salen siempre.
 
 Lo más importante para el código es que `genre` es una lista y no un texto, así que no lo puedo pintar directamente.
+
+## 3. Axios y npm
+
+### Qué es Axios
+
+Axios es una librería de JavaScript para hacer peticiones a servidores (pedir datos a una API, enviarlos...). Funciona con promesas y sirve tanto en el navegador como en Node. Hace lo mismo que `fetch`, que ya usé en la Pokédex, pero con dos ventajas:
+
+- Convierte el JSON él solo y me deja los datos en `respuesta.data`. Con `fetch` tenía que hacer `await respuesta.json()`.
+- Si el servidor responde con un error (por ejemplo un 404), Axios lo trata como error y salta al `catch`. Con `fetch` tenía que comprobar yo `respuesta.ok`.
+
+### Instalarlo
+
+Desde la terminal integrada de VS Code, dentro de la carpeta `gameshelf`:
+
+```bash
+npm install axios
+```
+
+Me salió `added 25 packages`. En `package.json` solo cambió una línea, dentro de `dependencies`:
+
+```diff
+   "dependencies": {
++    "axios": "^1.20.0",
+     "react": "^19.2.8",
+     "react-dom": "^19.2.8"
+   },
+```
+
+El `^` quiere decir que acepta versiones nuevas de la 1 (1.20.1, 1.21...) pero nunca la 2.0.0, que podría cambiar cosas y romper el código.
+
+También cambió `package-lock.json`, mucho más: se añadieron 25 paquetes, axios y los que necesita él para funcionar (`follow-redirects`, `form-data`, `proxy-from-env`...). Ahí se guarda la versión exacta de cada uno, para que si otro hace `npm install` le salgan las mismas.
+
+### Qué descubrí de npm, las dependencias y node_modules
+
+- **Dependencia:** es código de otras personas que mi proyecto necesita para funcionar, como React o ahora Axios. En `dependencies` va lo que necesita la app cuando se usa, y en `devDependencies` lo que solo hace falta para programar (Vite, TypeScript, ESLint). Axios va en `dependencies` porque su código acaba dentro de la app.
+- **npm:** es el gestor de paquetes de Node, parecido a Maven en Java. Descarga las librerías de internet (de npmjs.com) y las apunta en `package.json`. `npm install` sin nada instala todo lo que ya está apuntado, y `npm install axios` añade un paquete nuevo.
+- **node_modules:** es la carpeta donde npm descarga el código de todas las dependencias, también las que necesitan ellas. A mí me ocupa 121 MB. No se toca a mano, porque si reinstalas se pierden los cambios, y no se sube a GitHub: ya viene en el `.gitignore` y cualquiera la puede volver a crear con `npm install`. Lo que sí se sube es `package.json` y `package-lock.json`.
+
+**¿Qué hace Axios y qué descubrí sobre esos archivos y herramientas?** Axios hace las peticiones a la API y me da los datos ya preparados. npm lo instala y lo apunta como dependencia en `package.json`, la versión exacta queda guardada en `package-lock.json` y el código descargado está en `node_modules`, que no se sube.
+
+Fuentes: [Axios](https://axios.rest/), [npm install](https://docs.npmjs.com/cli/commands/npm-install), [package.json](https://docs.npmjs.com/cli/configuring-npm/package-json)
