@@ -57,6 +57,22 @@
   outline-offset: 3px;
 }
 
+.app > .estado {
+  margin: 0 auto 40px;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--gris);
+}
+
+.app > .error {
+  max-width: 640px;
+  padding: 16px 24px;
+  border: 1px solid var(--rojo);
+  border-radius: 16px;
+  background: rgba(255, 69, 58, 0.1);
+  color: var(--texto);
+}
+
 .catalog {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));

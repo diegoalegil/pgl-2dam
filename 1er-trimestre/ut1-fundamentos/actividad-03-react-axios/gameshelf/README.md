@@ -196,3 +196,53 @@ Y en `App.tsx` recorro los juegos con `map()`, igual que en la actividad anterio
 ```
 
 Con esto ya salen los juegos de la API, pero salen **los 1043** y, mientras llegan, la página se queda vacía sin decir nada. Eso lo arreglo en los siguientes pasos.
+
+## 5. Mensaje de carga y de error
+
+La petición tarda un poco y puede fallar (sin internet, la API caída...), así que añadí dos estados más:
+
+```tsx
+const [cargando, setCargando] = useState(true);
+const [error, setError] = useState<string | null>(null);
+```
+
+- `cargando` empieza en `true`, porque nada más abrir la página ya se está pidiendo.
+- `error` empieza en `null` (no hay error). Si falla, guardo ahí el mensaje que quiero enseñar.
+
+Y en `cargarJuegos` completé el `try/catch` con un `finally`:
+
+```tsx
+try {
+  const respuesta = await axios.get<Juego[]>(URL_API);
+  setJuegos(respuesta.data);
+} catch (errorCapturado) {
+  console.error(errorCapturado);
+  setError("No se han podido cargar los videojuegos. Comprueba tu conexión e inténtalo de nuevo.");
+} finally {
+  setCargando(false);
+}
+```
+
+- Si todo va bien, guardo los juegos.
+- Si falla, Axios salta al `catch`: guardo el error completo en la consola (para mí, por si tengo que ver qué pasó) y un mensaje que se entienda para el usuario.
+- El `finally` se ejecuta siempre, vaya bien o mal, así que ahí quito el "cargando".
+
+En el `return` los muestro con `&&`, que pinta lo de la derecha solo si lo de la izquierda es verdadero:
+
+```tsx
+{cargando && <p className="estado">Cargando videojuegos...</p>}
+
+{error && (
+  <p className="estado error" role="alert">
+    {error}
+  </p>
+)}
+```
+
+Los puse dentro del `<main>` y debajo del título, para que el título se vea siempre. Al mensaje de error le di un estilo en `App.css`: un recuadro con el borde rojo.
+
+Para probar la carga puse la red lenta, y para el error corté la petición a la API, que es lo mismo que pasa sin internet (en DevTools se puede hacer con la pestaña Red: "Slow 4G" o "Sin conexión"):
+
+![Mientras llegan los datos sale "Cargando videojuegos..."](capturas/05-cargando.png)
+
+![Si falla la petición sale el mensaje de error](capturas/05-error.png)
