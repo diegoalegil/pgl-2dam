@@ -111,3 +111,88 @@ También cambió `package-lock.json`, mucho más: se añadieron 25 paquetes, axi
 **¿Qué hace Axios y qué descubrí sobre esos archivos y herramientas?** Axios hace las peticiones a la API y me da los datos ya preparados. npm lo instala y lo apunta como dependencia en `package.json`, la versión exacta queda guardada en `package-lock.json` y el código descargado está en `node_modules`, que no se sube.
 
 Fuentes: [Axios](https://axios.rest/), [npm install](https://docs.npmjs.com/cli/commands/npm-install), [package.json](https://docs.npmjs.com/cli/configuring-npm/package-json)
+
+## 4. Conectar GameShelf con la API
+
+### El tipo Juego
+
+Como el proyecto es TypeScript, primero hice un tipo para los juegos en un archivo nuevo, `src/types/Juego.ts`. Lo hice a partir del JSON que miré antes, y solo con los campos que uso:
+
+```ts
+export interface Juego {
+  id: number;
+  name: string;
+  genre: string[];
+}
+```
+
+`genre` es `string[]` (una lista de textos) porque en la API viene entre `[ ]`. El tipo `Game` de la actividad anterior (`title`, `price`, `available`) ya no me sirve, porque la API no tiene esos campos.
+
+### Quitar los juegos fijos y pedirlos a la API
+
+En `App.tsx` borré la lista de 14 juegos que tenía escrita a mano y los dos filtros, porque la actividad dice que los datos tienen que venir de la petición y que no añada filtros. En su lugar:
+
+```tsx
+const URL_API = "https://api.sampleapis.com/switch/games";
+
+function App() {
+  const [juegos, setJuegos] = useState<Juego[]>([]);
+
+  useEffect(() => {
+    async function cargarJuegos(): Promise<void> {
+      try {
+        const respuesta = await axios.get<Juego[]>(URL_API);
+        setJuegos(respuesta.data);
+      } catch (errorCapturado) {
+        console.error(errorCapturado);
+      }
+    }
+
+    cargarJuegos();
+  }, []);
+```
+
+- `useState<Juego[]>([])` guarda los juegos. Empieza como una lista vacía porque al principio todavía no han llegado.
+- `useEffect(() => { ... }, [])` ejecuta lo de dentro cuando se muestra el componente. El `[]` del final hace que sea **solo una vez**, al principio. Si no lo pongo, se ejecutaría después de cada render y, como dentro cambio el estado, se harían peticiones sin parar.
+- La función que le paso a `useEffect` no puede ser `async`, así que creo dentro `cargarJuegos`, que sí lo es, y la llamo justo debajo.
+- `axios.get<Juego[]>(URL_API)` hace la petición GET. El `<Juego[]>` le dice a TypeScript que lo que viene es una lista de juegos.
+- Con `await` espero la respuesta y los juegos están en `respuesta.data`. Al hacer `setJuegos(respuesta.data)` React vuelve a pintar la página con ellos.
+
+Arriba del archivo están los imports:
+
+```tsx
+import { useEffect, useState } from "react";
+import axios from "axios";
+import type { Juego } from "./types/Juego";
+```
+
+Axios se importa sin llaves porque es la exportación por defecto, y sin ruta porque viene de `node_modules`. El tipo va con `import type` porque el proyecto lo exige (si no, da error).
+
+### La tarjeta con los datos de la API
+
+`GameCard` ahora recibe el juego entero en vez de cada dato por separado, y muestra el nombre y el género:
+
+```tsx
+export default function GameCard({ juego }: GameCardProps) {
+  return (
+    <article className="card">
+      <h2>{juego.name}</h2>
+      <p>Género: {juego.genre.join(", ")}</p>
+    </article>
+  );
+}
+```
+
+Como `genre` es una lista, uso `join(", ")` para que salgan separados por comas. Sin el `join` salían pegados, por ejemplo "Survivalthird-person shooter".
+
+Y en `App.tsx` recorro los juegos con `map()`, igual que en la actividad anterior, con el `id` de la API como `key`:
+
+```tsx
+<section className="catalog">
+  {juegos.map((juego) => (
+    <GameCard key={juego.id} juego={juego} />
+  ))}
+</section>
+```
+
+Con esto ya salen los juegos de la API, pero salen **los 1043** y, mientras llegan, la página se queda vacía sin decir nada. Eso lo arreglo en los siguientes pasos.

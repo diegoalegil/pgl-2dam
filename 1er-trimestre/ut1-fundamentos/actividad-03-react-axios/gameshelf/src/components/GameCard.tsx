@@ -1,24 +1,14 @@
+import type { Juego } from "../types/Juego";
+
 type GameCardProps = {
-  title: string;
-  genre: string;
-  price: number;
-  available: boolean;
+  juego: Juego;
 };
 
-export default function GameCard({
-  title,
-  genre,
-  price,
-  available,
-}: GameCardProps) {
+export default function GameCard({ juego }: GameCardProps) {
   return (
     <article className="card">
-      <h2>{title}</h2>
-      <p>Género: {genre}</p>
-      <p>Precio: {price} €</p>
-      <p className={available ? "status available" : "status unavailable"}>
-        {available ? "Disponible" : "No disponible"}
-      </p>
+      <h2>{juego.name}</h2>
+      <p>Género: {juego.genre.join(", ")}</p>
     </article>
   );
 }
