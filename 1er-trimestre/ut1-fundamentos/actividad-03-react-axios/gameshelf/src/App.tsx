@@ -5,6 +5,7 @@ import GameCard from "./components/GameCard";
 import type { Juego } from "./types/Juego";
 
 const URL_API = "https://api.sampleapis.com/switch/games";
+const LIMITE_JUEGOS = 20;
 
 function App() {
   const [juegos, setJuegos] = useState<Juego[]>([]);
@@ -27,6 +28,8 @@ function App() {
     cargarJuegos();
   }, []);
 
+  const juegosVisibles = juegos.slice(0, LIMITE_JUEGOS);
+
   return (
     <main className="app">
       <h1>GameShelf</h1>
@@ -41,7 +44,7 @@ function App() {
       )}
 
       <section className="catalog">
-        {juegos.map((juego) => (
+        {juegosVisibles.map((juego) => (
           <GameCard key={juego.id} juego={juego} />
         ))}
       </section>

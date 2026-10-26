@@ -18,6 +18,33 @@ En esta actividad conecto GameShelf con una API de videojuegos de Nintendo Switc
 
 Necesita conexión a internet, porque los juegos vienen de la API.
 
+## Estructura del proyecto
+
+```text
+gameshelf/
+├── index.html
+├── package.json           (aquí aparece axios en las dependencias)
+├── README.md
+├── capturas/              (capturas de este README)
+└── src/
+    ├── main.tsx           (arranca React y pinta App)
+    ├── App.tsx            (la petición a la API, la carga, el error y la lista)
+    ├── App.css            (el diseño)
+    ├── index.css          (colores y estilos generales)
+    ├── types/
+    │   └── Juego.ts       (el tipo de los juegos que vienen de la API)
+    └── components/
+        └── GameCard.tsx   (la tarjeta de cada juego)
+```
+
+## Funcionalidades
+
+- Pide los videojuegos a la API de SampleAPIs con Axios al abrir la página.
+- Muestra los 20 primeros en tarjetas, con su nombre y su género.
+- Mientras llegan los datos sale "Cargando videojuegos...".
+- Si la petición falla, sale un mensaje de error que se entiende.
+- Mantiene el diseño de la actividad anterior: oscuro en morado y rosa, y las tarjetas se iluminan al pasar el ratón.
+
 ## 1. Preparación del proyecto
 
 La actividad dice que trabaje sobre el GameShelf de la Actividad 02, pero esa ya la entregué y no quería cambiarla. Así que copié el proyecto a una carpeta nueva, `actividad-03-react-axios`, sin `node_modules` (eso se vuelve a descargar), y lo arranqué como en la actividad anterior:
@@ -246,3 +273,23 @@ Para probar la carga puse la red lenta, y para el error corté la petición a la
 ![Mientras llegan los datos sale "Cargando videojuegos..."](capturas/05-cargando.png)
 
 ![Si falla la petición sale el mensaje de error](capturas/05-error.png)
+
+## 6. Mostrar solo 20 juegos
+
+1043 tarjetas eran demasiadas, así que muestro solo las 20 primeras con `slice`:
+
+```tsx
+const LIMITE_JUEGOS = 20;
+
+const juegosVisibles = juegos.slice(0, LIMITE_JUEGOS);
+```
+
+`slice(0, 20)` devuelve una lista nueva con los elementos del 0 al 19 y no toca la original, así que en `juegos` siguen estando todos. Luego hago el `map` sobre `juegosVisibles`. Puse el 20 en una constante para cambiarlo fácil.
+
+No usé `filter`, porque ese filtra por una condición y no por cantidad, ni `splice`, porque ese sí cambia el array original. Otra forma sería pedirle menos juegos a la API con `?_limit=20` al final de la URL. Lo probé y funciona con esta API, pero depende de cada servidor, así que me quedé con `slice`.
+
+De paso quité del `App.css` lo que ya no se usaba de la actividad anterior: los estilos de los botones de los filtros y la barra de vida de "Disponible". En `index.html` puse el idioma en español (`lang="es"`) y el título de la pestaña, `GameShelf`.
+
+Así queda la app:
+
+![GameShelf con los 20 primeros juegos de la API](capturas/06-lista-juegos.png)
